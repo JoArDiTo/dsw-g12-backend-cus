@@ -9,27 +9,27 @@ Tratamos el desarrollo del backend de los casos de uso proporcionados en el diag
 - Uso de render para desplegar proyecto
 
 ## Instalación:
-- Descargamos el repositorio como .ZIP o con el siguiente enlace SSH:
+- Descargamos el repositorio como .ZIP o con el siguiente comando:
 ```bash
 git clone git@github.com:JoArDiTo-DEV/dsw-g12-backend-cus.git
 ```
 
-- Nos dirigimos a la carpeta del proyecto importado
+- Una vez instalado, nos dirigimos a la carpeta del proyecto importado
 ```bash
 cd g12-sisvita3-backend-cus/
 ```
 
-- Una vez instalado, abrimos en nuestro editor de codigo e instalamos el entorno virtual:
+- Abrimos en nuestro editor de codigo e instalamos el entorno virtual por la terminal:
 ```bash
 virtualenv venv
 ```
 
-- En caso de no tener la librería, instalamos con:
+- En caso de no tener la librería *virtualenv*, instalamos con el siguiente comando:
 ```bash
 pip install virtualenv
 ```
 
-- Ahora, activamos el entorno virtual:
+- Continuando con la instalación, activamos el entorno virtual:
 
 ### Para sistemas WINDOWS:
 ```cmd
@@ -46,7 +46,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-- Configuramos la base de datos a utilizar (crear un archivo .env)
+- Creamos un archivo .env para realizar la configuración de la base de datos, en el archivo debe ir lo siguiente:
+```.env
+USER = <nombre-del-usuario-de-la-base-de-datos>
+PASSWORD = <contraseña-de-la-base-de-datos>
+DATABASE = <nombre-de-la-base-de-datos>
+HOST = <host-de-la-base-de-datos>
+SERVER = postgresql
+```
 
 - Corremos el programa
 ```bash
