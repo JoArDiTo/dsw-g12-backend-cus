@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.respuesta import Respuesta
 from utils.db import db
 from schemas.respuesta_schema import respuesta_schema, respuestas_schema
+from flask_jwt_extended import jwt_required
 
 respuestas = Blueprint('respuestas', __name__)
 
 @respuestas.route('/respuestas/get', methods=['GET'])
+@jwt_required()
 def get_respuestas():
     respuestas = Respuesta.query.all()
     result = respuestas_schema.dump(respuestas)
@@ -19,6 +21,7 @@ def get_respuestas():
     return make_response(jsonify(data), 200)
 
 @respuestas.route('/respuestas/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     id_test = data.get('id_test')
@@ -49,6 +52,7 @@ def insert():
     return make_response(jsonify(result), 201)
 
 @respuestas.route('/respuestas/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     data = request.get_json()
     respuesta = Respuesta.query.get(id)
@@ -80,6 +84,7 @@ def update(id):
 #UNA RESPUESTA NO PUEDE SER BORRADA, DEBIDO A QUE QUEDA REGISTRADA
 
 @respuestas.route('/respuestas/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     respuesta = Respuesta.query.get(id)
     

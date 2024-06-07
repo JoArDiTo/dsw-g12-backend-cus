@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.tipo_rol import TipoRol
 from utils.db import db
 from schemas.tipo_rol_schema import tipo_roles_schema, tipos_roles_schema
+from flask_jwt_extended import jwt_required
 
 roles = Blueprint('roles', __name__)
 
 @roles.route('/roles/get', methods=['GET'])
+@jwt_required()
 def get_roles():
     result = {}
     rols = TipoRol.query.all()
@@ -20,6 +22,7 @@ def get_roles():
     return jsonify(data)
 
 @roles.route('/roles/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     descripcion = data.get('descripcion')
@@ -47,6 +50,7 @@ def insert():
     return jsonify(result)
 
 @roles.route('/roles/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     data = request.get_json()
     descripcion = data.get('descripcion')
@@ -83,6 +87,7 @@ def update(id):
     return jsonify(data)
 
 @roles.route('/roles/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     rol = TipoRol.query.get(id)
     

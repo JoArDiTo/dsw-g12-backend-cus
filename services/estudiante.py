@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.estudiante import Estudiante
 from utils.db import db
 from schemas.estudiante_schema import estudiante_schema, estudiantes_schema
+from flask_jwt_extended import jwt_required
 
 estudiantes = Blueprint('estudiantes', __name__)
 
 @estudiantes.route('/estudiantes/get', methods=['GET'])
+@jwt_required()
 def get_estudiantes():
     result = {}
     estudiantes = Estudiante.query.all()
@@ -21,6 +23,7 @@ def get_estudiantes():
     
 
 @estudiantes.route('/estudiantes/insert', methods=['POST'])
+# NO SE REQUIERE JWT CREAR ESTUDIANTES
 def insert():
     cod_alumno = request.json.get('cod_alumno')
     anio_ingreso = request.json.get('anio_ingreso')
@@ -63,6 +66,7 @@ def insert():
 
 
 @estudiantes.route('/estudiantes/update/<int:cod_alumno>', methods=['PUT'])
+@jwt_required()
 def update(cod_alumno):
     estudiante = Estudiante.query.get(cod_alumno)
     
@@ -94,6 +98,7 @@ def update(cod_alumno):
     return make_response(jsonify(data),404)
 
 @estudiantes.route('/estudiantes/delete/<int:cod_alumno>', methods=['DELETE'])
+@jwt_required()
 def delete(cod_alumno):
     estudiante = Estudiante.query.get(cod_alumno)
     

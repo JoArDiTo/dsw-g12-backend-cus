@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.test import Test
 from utils.db import db
 from schemas.test_schema import test_schema, tests_schema
+from flask_jwt_extended import jwt_required
 
 tests = Blueprint('tests', __name__)
 
 @tests.route('/tests/get', methods=['GET'])
+@jwt_required()
 def get_tests():
     tests = Test.query.all()
     result = tests_schema.dump(tests)
@@ -19,6 +21,7 @@ def get_tests():
     return make_response(jsonify(data), 200)
 
 @tests.route('/tests/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     id_evaluacion = data.get('id_evaluacion')
@@ -49,6 +52,7 @@ def insert():
     return make_response(jsonify(result), 201) 
 
 @tests.route('/tests/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     data = request.get_json()
     test = Test.query.get(id)
@@ -79,6 +83,7 @@ def update(id):
 
 #NO SE PUEDE ELIMINAR UN TEST PORQUE SE PIERDE LA RELACIÓN CON LAS PREGUNTAS Y RESPUESTAS
 @tests.route('/tests/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     test = Test.query.get(id)
     

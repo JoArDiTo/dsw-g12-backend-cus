@@ -19,8 +19,16 @@ from services.alternativa import alternativas
 from services.escala_calificacion import escalas
 from services.rango_calificacion import rangos
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 app=Flask(__name__)
+
+app.config['JWT_SECRET_KEY']='9aa6fe2ac33742958ef600ffea2230fc'
+app.config['JWT_ACCESS_TOKEN_EXPIRES']=timedelta(hours=2)
+app.config['JWT_REFRESH_TOKEN_EXPIRES']=timedelta(days=1)
+jwt=JWTManager(app)
+
 CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}})
 app.config['SQLALCHEMY_DATABASE_URI']=DATABASE_CONNECTION
 db.init_app(app)

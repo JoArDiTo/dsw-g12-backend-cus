@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.tipo_test import TipoTest
 from utils.db import db
 from schemas.tipo_test_schema import tipo_test_schema, tipos_test_schema
+from flask_jwt_extended import jwt_required
 
 tipos_test = Blueprint('tipos_test', __name__)
 
 @tipos_test.route('/tipos/get', methods=['GET'])
+@jwt_required()
 def get_tipos_test():
     tipos_test = TipoTest.query.all()
     result = tipos_test_schema.dump(tipos_test)
@@ -19,6 +21,7 @@ def get_tipos_test():
     return make_response(jsonify(data), 200)
 
 @tipos_test.route('/tipos/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     nombre = data.get('nombre')
@@ -47,6 +50,7 @@ def insert():
     return make_response(jsonify(result))
 
 @tipos_test.route('/tipos/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     data = request.get_json()
     tipo_test = TipoTest.query.get(id)
@@ -75,6 +79,7 @@ def update(id):
         
 
 @tipos_test.route('/tipos/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     tipo_test = TipoTest.query.get(id)
     

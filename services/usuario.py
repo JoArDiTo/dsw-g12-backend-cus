@@ -3,6 +3,7 @@ from models.usuario import Usuario
 from utils.db import db
 from schemas.usuario_schema import usuario_schema, usuarios_schema
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required
 
 usuarios = Blueprint('usuarios', __name__)
 
@@ -28,17 +29,16 @@ def login():
         }
         return make_response(jsonify(data), 400)
     
-    result = usuario_schema.dump(usuario)
-    
     data = {
-        'message': 'Usuario encontrado con éxito',
-        'status': 200,
-        'data': result
+        'message': 'Inicio de sesión exitoso',
+        'access_token': create_access_token(identity=usuario.documento),
+        'refresh_token': create_refresh_token(identity=usuario.documento),
     }
     
     return make_response(jsonify(data), 200)
 
 @usuarios.route('/usuarios/get', methods=['GET'])
+@jwt_required()
 def get_usuarios():
     result = {}
     usuarios = Usuario.query.all()
@@ -53,6 +53,7 @@ def get_usuarios():
     return make_response(jsonify(data),200)
 
 @usuarios.route('/usuarios/insert', methods=['POST'])
+#NO SE DEBE REQUERIR JWT PARA CREAR UN USUARIO
 def insert():
     data = request.get_json()
     documento = data.get('documento')
@@ -88,6 +89,7 @@ def insert():
     return make_response(jsonify(result),201)
 
 @usuarios.route('/usuarios/update/<string:documento>', methods=['PUT'])
+@jwt_required()
 def update(documento):
     result = {}
     data = request.get_json()
@@ -104,7 +106,7 @@ def update(documento):
     usuario.apellido_materno = data.get('apellido_materno')
     usuario.telefono = data.get('telefono')
     usuario.correo = data.get('correo')
-    usuario.password = data.get('password')
+    usuario.password = generate_password_hash(data.get('password'))
     usuario.id_tipo_rol = data.get('id_tipo_rol')
     
     db.session.commit()
@@ -121,6 +123,7 @@ def update(documento):
 
 
 @usuarios.route('/usuarios/delete/<string:documento>', methods=['DELETE'])
+@jwt_required()
 def delete(documento):
     usuario = Usuario.query.get(documento)
     

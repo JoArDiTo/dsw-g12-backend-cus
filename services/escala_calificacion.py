@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.escala_calificacion import EscalaCalificacion
 from utils.db import db
 from schemas.escala_calificacion_schema import escala_calificacion_schema, escalas_calificacion_schema
+from flask_jwt_extended import jwt_required
 
 escalas = Blueprint('escalas', __name__)
 
 @escalas.route('/escalas/get', methods=['GET'])
+@jwt_required()
 def get_escalas_calificacion():
     escalas_calificacion = EscalaCalificacion.query.all()
     result = escalas_calificacion_schema.dump(escalas_calificacion)
@@ -19,6 +21,7 @@ def get_escalas_calificacion():
     return make_response(jsonify(data), 200)
 
 @escalas.route('/escalas/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     id_tipo_test = data.get('id_tipo_test')
@@ -47,6 +50,7 @@ def insert():
     return make_response(jsonify(result), 201)
 
 @escalas.route('/escalas/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     data = request.get_json()
     escala_calificacion = EscalaCalificacion.query.get(id)
@@ -74,6 +78,7 @@ def update(id):
     return make_response(jsonify(data), 404)
 
 @escalas.route('/escalas/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     escala_calificacion = EscalaCalificacion.query.get(id)
     

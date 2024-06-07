@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.atencion import Atencion
 from utils.db import db
 from schemas.atencion_schema import atencion_schema, atenciones_schema
+from flask_jwt_extended import jwt_required
 
 atenciones = Blueprint('atenciones', __name__)
 
 @atenciones.route('/atenciones/get', methods=['GET'])
+@jwt_required()
 def get_atenciones():
     atenciones = Atencion.query.all()
     result = atenciones_schema.dump(atenciones)
@@ -19,6 +21,7 @@ def get_atenciones():
     return make_response(jsonify(data), 200)
 
 @atenciones.route('/atenciones/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     id_horario = data.get('id_horario')
@@ -51,6 +54,7 @@ def insert():
     return make_response(jsonify(data), 201)
 
 @atenciones.route('/atenciones/update/<int:id_atencion>', methods=['PUT'])
+@jwt_required()
 def update(id_atencion):
     atencion = Atencion.query.get(id_atencion)
     
@@ -81,6 +85,7 @@ def update(id_atencion):
     return make_response(jsonify(data), 404)
 
 @atenciones.route('/atenciones/delete/<int:id_atencion>', methods=['DELETE'])
+@jwt_required()
 def delete(id_atencion):
     atencion = Atencion.query.get(id_atencion)
     

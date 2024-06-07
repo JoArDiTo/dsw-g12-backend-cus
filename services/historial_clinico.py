@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.historial_clinico import HistorialClinico
 from utils.db import db
 from schemas.historial_clinico_schema import historial_clinico_schema, historiales_clinicos_schema
+from flask_jwt_extended import jwt_required
 
 historial_clinico = Blueprint('historial_clinico', __name__)
 
 @historial_clinico.route('/historiales/get', methods=['GET'])
+@jwt_required()
 def get_historiales():
     historiales = HistorialClinico.query.all()
     result = historiales_clinicos_schema.dump(historiales)
@@ -19,6 +21,7 @@ def get_historiales():
     return make_response(jsonify(data), 200)
 
 @historial_clinico.route('/historiales/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     cod_alumno = data.get('cod_alumno')
@@ -48,6 +51,7 @@ def insert():
 
 #NO SE PUEDE ACTUALIZAR UN HISTORIAL CLINICO, DEBIDO A QUE ES ÚNICO PARA CADA ESTUDIANTE
 @historial_clinico.route('/historiales/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     data = request.get_json()
     historial = HistorialClinico.query.get(id)
@@ -82,6 +86,7 @@ def update(id):
 
 
 @historial_clinico.route('/historiales/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     result = {}
     historial = HistorialClinico.query.get(id)

@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.evaluacion import Evaluacion
 from utils.db import db
 from schemas.evaluacion_schema import evaluacion_schema, evaluaciones_schema
+from flask_jwt_extended import jwt_required
 
 evaluaciones = Blueprint('evaluaciones', __name__)
 
 @evaluaciones.route('/evaluaciones/get', methods=['GET'])
+@jwt_required()
 def get_evaluaciones():
     evaluaciones = Evaluacion.query.all()
     result = evaluaciones_schema.dump(evaluaciones)
@@ -19,6 +21,7 @@ def get_evaluaciones():
     return make_response(jsonify(data), 200)
 
 @evaluaciones.route('/evaluaciones/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     id_historial_clinico = data.get('id_historial_clinico')
@@ -49,6 +52,7 @@ def insert():
     return make_response(jsonify(result), 201)
 
 @evaluaciones.route('/evaluaciones/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     data = request.get_json()
     evaluacion = Evaluacion.query.get(id)
@@ -79,6 +83,7 @@ def update(id):
     return make_response(jsonify(data), 404)
 
 @evaluaciones.route('/evaluaciones/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     evaluacion = Evaluacion.query.get(id)
     

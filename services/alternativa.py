@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.alternativa import Alternativa
 from utils.db import db
 from schemas.alternativa_schema import alternativa_schema, alternativas_schema
+from flask_jwt_extended import jwt_required
 
 alternativas = Blueprint('alternativas', __name__)
 
 @alternativas.route('/alternativas/get', methods=['GET'])
+@jwt_required()
 def get_alternativas():
     alternativas = Alternativa.query.all()
     result = alternativas_schema.dump(alternativas)
@@ -19,6 +21,7 @@ def get_alternativas():
     return make_response(jsonify(data), 200)
 
 @alternativas.route('/alternativas/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     id_pregunta = data.get('id_pregunta')
@@ -48,6 +51,7 @@ def insert():
     return make_response(jsonify(result), 201)
 
 @alternativas.route('/alternativas/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     data = request.get_json()
     alternativa = Alternativa.query.get(id)
@@ -76,6 +80,7 @@ def update(id):
     return make_response(jsonify(data), 404)
 
 @alternativas.route('/alternativas/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     alternativa = Alternativa.query.get(id)
     

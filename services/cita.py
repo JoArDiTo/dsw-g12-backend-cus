@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.cita import Cita
 from utils.db import db
 from schemas.cita_schema import cita_schema, citas_schema
+from flask_jwt_extended import jwt_required
 
 citas = Blueprint('citas', __name__)
 
 @citas.route('/citas/get', methods=['GET'])
+@jwt_required()
 def get_citas():
     citas = Cita.query.all()
     result = citas_schema.dump(citas)
@@ -19,6 +21,7 @@ def get_citas():
     return make_response(jsonify(data), 200)
 
 @citas.route('/citas/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     id_atencion = data.get('id_atencion')
@@ -50,6 +53,7 @@ def insert():
     return make_response(jsonify(data), 201)
 
 @citas.route('/citas/update/<int:id_cita>', methods=['PUT'])
+@jwt_required()
 def update(id_cita):
     cita = Cita.query.get(id_cita)
     
@@ -79,6 +83,7 @@ def update(id_cita):
     return make_response(jsonify(data), 404)
 
 @citas.route('/citas/delete/<int:id_cita>', methods=['DELETE'])
+@jwt_required()
 def delete(id_cita):
     cita = Cita.query.get(id_cita)
     

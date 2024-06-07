@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from models.horario import Horario
 from utils.db import db
 from schemas.horario_schema import horario_schema, horarios_schema
+from flask_jwt_extended import jwt_required
 
 horarios = Blueprint('horarios', __name__)
 
 @horarios.route('/horarios/get', methods=['GET'])
+@jwt_required()
 def get_horarios():
     horarios = Horario.query.all()
     result = horarios_schema.dump(horarios)
@@ -19,6 +21,7 @@ def get_horarios():
     return make_response(jsonify(data), 200)
 
 @horarios.route('/horarios/insert', methods=['POST'])
+@jwt_required()
 def insert():
     data = request.get_json()
     id_especialista = data.get('id_especialista')
@@ -47,6 +50,7 @@ def insert():
     return make_response(jsonify(data), 201)
 
 @horarios.route('/horarios/update/<int:id>', methods=['PUT'])
+@jwt_required()
 def update(id):
     horario = Horario.query.get(id)
     
@@ -74,6 +78,7 @@ def update(id):
     return make_response(jsonify(data), 404)
 
 @horarios.route('/horarios/delete/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete(id):
     result = {}
     horario = Horario.query.get(id)
