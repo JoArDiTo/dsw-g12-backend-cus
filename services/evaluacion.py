@@ -59,9 +59,11 @@ def update(id):
     
     if evaluacion:
         evaluacion.id_historial_clinico = data.get('id_historial_clinico')
-        evaluacion.fecha = data.get('fecha')
+        if data.get('fecha'):
+            evaluacion.fecha = data.get('fecha')
         evaluacion.estado = data.get('estado')
-        evaluacion.tratamiento = data.get('tratamiento')
+        if data.get('tratamiento'):
+            evaluacion.tratamiento = data.get('tratamiento')
         
         db.session.commit()
         

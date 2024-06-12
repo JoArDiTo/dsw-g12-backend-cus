@@ -93,12 +93,9 @@ def delete(id_atencion):
         db.session.delete(atencion)
         db.session.commit()
         
-        result = atencion_schema.dump(atencion)
-        
         data = {
             'message': 'Atencion eliminada con éxito',
-            'status': 200,
-            'atencion': result
+            'status': 200
         }
         
         return make_response(jsonify(data), 200)

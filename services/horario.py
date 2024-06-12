@@ -87,12 +87,9 @@ def delete(id):
         db.session.delete(horario)
         db.session.commit()
         
-        result = horario_schema.dump(horario)
-        
         data = {
             'message': 'Horario eliminado con éxito',
-            'status': 200,
-            'data': result
+            'status': 200
         }
         
         return make_response(jsonify(data), 200)

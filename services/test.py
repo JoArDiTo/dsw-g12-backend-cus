@@ -60,8 +60,10 @@ def update(id):
     if test:
         test.id_evaluacion = data.get('id_evaluacion')
         test.id_tipo_test = data.get('id_tipo_test')
-        test.puntaje_total = data.get('puntaje_total')
-        test.diagnostico = data.get('diagnostico')
+        if data.get('puntaje_total'):
+            test.puntaje_total = data.get('puntaje_total')
+        if data.get('diagnostico'):
+            test.diagnostico = data.get('diagnostico')
         db.session.commit()
         
         result = test_schema.dump(test)

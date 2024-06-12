@@ -61,7 +61,8 @@ def update(id_cita):
         cita.id_atencion = request.json.get('id_atencion')
         cita.id_historial_clinico = request.json.get('id_historial_clinico')
         cita.estado = request.json.get('estado')
-        cita.observaciones = request.json.get('observaciones')
+        if data.get('observaciones'):
+            cita.observaciones = request.json.get('observaciones')
         
         db.session.commit()
         

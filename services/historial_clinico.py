@@ -95,12 +95,9 @@ def delete(id):
         db.session.delete(historial)
         db.session.commit()
         
-        result = historial_clinico_schema.dump(historial)
-        
         data = {
             'message': 'Historial eliminado con éxito',
-            'status': 200,
-            'data': result
+            'status': 200
         }
         
         return make_response(jsonify(data), 200)
