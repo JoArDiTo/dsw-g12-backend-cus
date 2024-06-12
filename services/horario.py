@@ -27,7 +27,7 @@ def insert():
     id_especialista = data.get('id_especialista')
     estado = data.get('estado')
     
-    if not id_especialista or not estado:
+    if not id_especialista or estado==None:
         data = {
             'message': 'Faltan datos',
             'status': 400

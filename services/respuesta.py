@@ -29,7 +29,7 @@ def insert():
     respuesta = data.get('respuesta')
     puntaje = data.get('puntaje')
     
-    if not id_test or not pregunta or not respuesta or not puntaje:
+    if not id_test or not pregunta or not respuesta or puntaje==None:
         data = {
             'message': 'Faltan datos',
             'status': 400

@@ -9,7 +9,7 @@ class Cita(db.Model):
     id_atencion = db.Column(db.Integer, db.ForeignKey('atencion.id_atencion'))
     id_historial_clinico = db.Column(db.Integer, db.ForeignKey('historial_clinico.id_historial_clinico'))
     estado = db.Column(db.Integer)
-    observaciones = db.Column(db.String(1024))
+    observaciones = db.Column(db.String(1024), default="No se han definido observaciones")
     
     def __init__(self, id_atencion, id_historial_clinico, estado, observaciones):
         self.id_atencion = id_atencion

@@ -29,7 +29,7 @@ def insert():
     puntaje_max = data.get('puntaje_max')
     interpretacion = data.get('interpretacion')
     
-    if not id_escala_calificacion or not puntaje_min or not puntaje_max or not interpretacion:
+    if not id_escala_calificacion or puntaje_min==None or puntaje_max==None or not interpretacion:
         data = {
             'message': 'Faltan datos',
             'status': 400

@@ -11,7 +11,7 @@ class Test(db.Model):
     id_evaluacion = db.Column(db.Integer, db.ForeignKey('evaluacion.id_evaluacion'))
     id_tipo_test = db.Column(db.Integer, db.ForeignKey('tipo_test.id_tipo_test'))
     puntaje_total = db.Column(db.Integer, default=0)
-    diagnostico = db.Column(db.String(30))
+    diagnostico = db.Column(db.String(30), default="Sin diagnóstico")
     
     respuesta = db.relationship('Respuesta', backref='test', cascade="all,delete, delete-orphan")
     

@@ -29,7 +29,7 @@ def insert():
     puntaje_total = data.get('puntaje_total')
     diagnostico = data.get('diagnostico')
     
-    if not id_evaluacion or not id_tipo_test or not puntaje_total or not diagnostico:
+    if not id_evaluacion or not id_tipo_test: #Diagnóstico y puntaje total puede ser nulo
         data = {
             'message': 'Faltan datos',
             'status': 400

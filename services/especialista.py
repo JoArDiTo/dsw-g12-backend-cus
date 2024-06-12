@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from models.especialista import Especialista
+from models.usuario import Usuario
 from utils.db import db
 from schemas.especialista_schema import especialista_schema, especialistas_schema
 from flask_jwt_extended import jwt_required
@@ -26,6 +27,18 @@ def insert():
     numero_de_colegiatura = request.json.get('numero_de_colegiatura')
     documento = request.json.get('documento')
     
+    if Especialista.query.filter_by(numero_de_colegiatura=numero_de_colegiatura).first():
+        # En caso no se cree el especialista para el usuario, borramos dicho usuario
+        usuario = Usuario.query.get(documento)
+        db.session.delete(usuario)
+        db.session.commit()
+        data = {
+            'message': 'Número de colegiatura ya registrado',
+            'status': 400
+        }
+        
+        return make_response(jsonify(data), 400)
+    
     if not numero_de_colegiatura or not documento:
         data = {
             'message': 'Faltan datos',
@@ -49,6 +62,7 @@ def insert():
     
     return make_response(jsonify(data), 201)
 
+#LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
 @especialistas.route('/especialistas/update/<int:id_especialista>', methods=['PUT'])
 @jwt_required()
 def update(id_especialista):

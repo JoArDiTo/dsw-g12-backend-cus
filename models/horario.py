@@ -8,7 +8,7 @@ class Horario(db.Model):
     
     id_horario = db.Column(db.Integer, primary_key=True)
     id_especialista = db.Column(db.Integer, db.ForeignKey('especialista.id_especialista'))
-    estado = db.Column(db.Integer)
+    estado = db.Column(db.Boolean)
     
     atencion = db.relationship('Atencion', backref='horario', cascade="all,delete, delete-orphan")
     

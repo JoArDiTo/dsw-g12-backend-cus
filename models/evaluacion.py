@@ -10,7 +10,7 @@ class Evaluacion(db.Model):
     id_historial_clinico = db.Column(db.Integer, db.ForeignKey('historial_clinico.id_historial_clinico'))
     fecha = db.Column(db.Date, default=db.func.current_date())
     estado = db.Column(db.Integer)
-    tratamiento = db.Column(db.String(256))
+    tratamiento = db.Column(db.String(256), default="No se ha definido un tratamiento")
     
     test = db.relationship('Test', backref='evaluacion', cascade="all,delete, delete-orphan")
     

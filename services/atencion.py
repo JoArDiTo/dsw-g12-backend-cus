@@ -30,7 +30,7 @@ def insert():
     hora_fin = data.get('hora_fin')
     reservado = data.get('reservado')
     
-    if not id_horario or not fecha or not hora_inicio or not hora_fin or not reservado:
+    if not id_horario or not fecha or not hora_inicio or not hora_fin or reservado==None:
         data = {
             'message': 'Faltan datos',
             'status': 400

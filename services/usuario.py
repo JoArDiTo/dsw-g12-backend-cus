@@ -65,6 +65,13 @@ def insert():
     correo = data.get('correo')
     password = data.get('password')
     id_tipo_rol = data.get('id_tipo_rol')
+    
+    if Usuario.query.get(documento):
+        data = {
+            'message': 'Documento ya registrado',
+            'status': 400
+        }
+        return make_response(jsonify(data), 400)
 
     if not documento or not tipo_documento or not nombre or not apellido_paterno or not apellido_materno or not telefono or not correo or not password or not id_tipo_rol:
         data = {
@@ -100,14 +107,12 @@ def update(documento):
         result['status'] = 404
         return make_response(jsonify(result), 404)
     
-    usuario.tipo_documento = data.get('tipo_documento')
     usuario.nombre = data.get('nombre')
     usuario.apellido_paterno = data.get('apellido_paterno')
     usuario.apellido_materno = data.get('apellido_materno')
     usuario.telefono = data.get('telefono')
     usuario.correo = data.get('correo')
     usuario.password = generate_password_hash(data.get('password'))
-    usuario.id_tipo_rol = data.get('id_tipo_rol')
     
     db.session.commit()
     

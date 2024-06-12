@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from models.estudiante import Estudiante
+from models.usuario import Usuario
 from utils.db import db
 from schemas.estudiante_schema import estudiante_schema, estudiantes_schema
 from flask_jwt_extended import jwt_required
@@ -34,8 +35,13 @@ def insert():
     documento = request.json.get('documento')
     
     if Estudiante.query.get(cod_alumno):
+        #En caso no se cree el estudiante para el usuario, borramos dicho usuario
+        usuario = Usuario.query.get(documento)
+        db.session.delete(usuario)
+        db.session.commit()
+        
         data = {
-            'message':'Estudiante ya existe',
+            'message':'Codigo de estudiante ya registrado',
             'status': 400
         }
         
