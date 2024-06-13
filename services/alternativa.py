@@ -24,11 +24,11 @@ def get_alternativas():
 @jwt_required()
 def insert():
     data = request.get_json()
-    id_pregunta = data.get('id_pregunta')
+    id_tipo_test = data.get('id_tipo_test')
     texto = data.get('texto')
     puntaje = data.get('puntaje')
     
-    if not id_pregunta or not texto or puntaje==None:
+    if not id_tipo_test or not texto or puntaje==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -36,7 +36,7 @@ def insert():
         
         return make_response(jsonify(data), 400)
     
-    alternativa = Alternativa(id_pregunta, texto, puntaje)
+    alternativa = Alternativa(id_tipo_test, texto, puntaje)
     db.session.add(alternativa)
     db.session.commit()
     
@@ -57,7 +57,7 @@ def update(id):
     alternativa = Alternativa.query.get(id)
     
     if alternativa:
-        alternativa.id_pregunta = data.get('id_pregunta')
+        alternativa.id_tipo_test = data.get('id_tipo_test')
         alternativa.texto = data.get('texto')
         alternativa.puntaje = data.get('puntaje')
         db.session.commit()

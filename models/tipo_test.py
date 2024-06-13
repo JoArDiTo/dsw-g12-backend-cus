@@ -12,6 +12,7 @@ class TipoTest(db.Model):
     escala_calificacion = db.relationship('EscalaCalificacion', backref='tipo_test', cascade="all,delete, delete-orphan")
     test = db.relationship('Test', backref='tipo_test', cascade="all,delete, delete-orphan")
     pregunta = db.relationship('Pregunta', backref='tipo_test', cascade="all,delete, delete-orphan")
+    alternativa = db.relationship('Alternativa', backref='tipo_test', cascade="all,delete, delete-orphan")
     
     def __init__(self, nombre, descripcion):
         self.nombre = nombre

@@ -1,13 +1,13 @@
 from utils.db import db
 from dataclasses import dataclass
-from models.pregunta import Pregunta
+from models.pregunta import TipoTest
 
 @dataclass
 class Alternativa(db.Model):
     __tablename__ = 'alternativa'
     
     id_alternativa = db.Column(db.Integer, primary_key=True)
-    id_pregunta = db.Column(db.Integer, db.ForeignKey('pregunta.id_pregunta'))
+    id_tipo_test = db.Column(db.Integer, db.ForeignKey('tipo_test.id_tipo_test'))
     texto = db.Column(db.String(100))
     puntaje = db.Column(db.Integer)
     
