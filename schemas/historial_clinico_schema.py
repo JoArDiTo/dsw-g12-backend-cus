@@ -7,7 +7,7 @@ class HistorialClinicoSchema(ma.Schema):
         class Meta:
                 model = HistorialClinico
                 fields = ('id_historial_clinico',
-                        'id_estudiante',
+                        'cod_alumno',
                         'id_especialista',
                         'estudiante',
                         'especialista')

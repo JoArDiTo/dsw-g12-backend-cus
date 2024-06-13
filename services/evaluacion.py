@@ -29,7 +29,7 @@ def insert():
     estado = data.get('estado')
     tratamiento = data.get('tratamiento')
     
-    if not id_historial_clinico or not estado: #Tratamiento puede ser nulo
+    if not id_historial_clinico or estado==None: #Tratamiento puede ser nulo
         data = {
             'message': 'Faltan datos',
             'status': 400

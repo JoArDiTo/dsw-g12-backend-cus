@@ -8,7 +8,7 @@ class EscalaCalificacion(db.Model):
     
     id_escala_calificacion = db.Column(db.Integer, primary_key=True)
     id_tipo_test = db.Column(db.Integer, db.ForeignKey('tipo_test.id_tipo_test'))
-    descripcion = db.Column(db.String(50))
+    descripcion = db.Column(db.String(256))
     
     rango_calificacion = db.relationship('RangoCalificacion', backref='escala_calificacion', cascade="all,delete, delete-orphan")
     

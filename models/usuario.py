@@ -16,8 +16,8 @@ class Usuario(db.Model):
     password = db.Column(db.String(256))
     id_tipo_rol = db.Column(db.Integer, db.ForeignKey('tipo_rol.id_tipo_rol'))
         
-    estudiante = db.relationship('Estudiante', backref='persona', cascade="all,delete, delete-orphan")
-    especialista = db.relationship('Especialista', backref='persona', cascade="all,delete, delete-orphan")
+    estudiante = db.relationship('Estudiante', backref='usuario', cascade="all,delete, delete-orphan")
+    especialista = db.relationship('Especialista', backref='usuario', cascade="all,delete, delete-orphan")
     
     
     def __init__(self,documento,tipo_documento,nombre,apellido_paterno,apellido_materno,telefono,correo,password,id_tipo_rol):

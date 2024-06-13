@@ -11,7 +11,7 @@ class Alternativa(db.Model):
     texto = db.Column(db.String(100))
     puntaje = db.Column(db.Integer)
     
-    def __init__(self, id_pregunta, texto, puntaje):
-        self.id_pregunta = id_pregunta
+    def __init__(self, id_tipo_test, texto, puntaje):
+        self.id_tipo_test = id_tipo_test
         self.texto = texto
         self.puntaje = puntaje

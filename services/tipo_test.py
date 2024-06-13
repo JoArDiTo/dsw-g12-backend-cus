@@ -15,7 +15,7 @@ def get_tipos_test():
     data = {
         'message': 'Lista generada con éxito',
         'status': 200,
-        'tipos_test': result
+        'tipos': result
     }
 
     return make_response(jsonify(data), 200)
