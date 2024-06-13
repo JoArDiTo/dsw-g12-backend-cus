@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from models.usuario import Usuario
+from models.tipo_rol import TipoRol
 from utils.db import db
 from schemas.usuario_schema import usuario_schema, usuarios_schema
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -29,9 +30,13 @@ def login():
         }
         return make_response(jsonify(data), 400)
     
+    rol = TipoRol.query.get(usuario.id_tipo_rol)
+    
+    claims = {"rol": rol.descripcion}
+    
     data = {
         'message': 'Inicio de sesión exitoso',
-        'access_token': create_access_token(identity=usuario.documento),
+        'access_token': create_access_token(identity=usuario.documento, additional_claims=claims),
         'refresh_token': create_refresh_token(identity=usuario.documento),
     }
     
