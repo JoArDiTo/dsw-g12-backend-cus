@@ -28,12 +28,11 @@ def insert():
     
     id_paciente = data.get('id_paciente')
     id_especialista = data.get('id_especialista')
-    fecha = data.get('fecha')
     motivo = data.get('motivo')
     detalle = data.get('detalle')
     estado = data.get('estado')
     
-    cita = Cita(id_paciente, id_especialista, fecha, motivo, detalle, estado)
+    cita = Cita(id_paciente, id_especialista, motivo, detalle, estado)
     db.session.add(cita)
     db.session.commit()
     
@@ -61,7 +60,6 @@ def update(id_cita):
     
     cita.id_paciente = request.get_json().get('id_paciente')
     cita.id_especialista = request.get_json().get('id_especialista')
-    cita.fecha = request.get_json().get('fecha')
     cita.motivo = request.get_json().get('motivo')
     cita.detalle = request.get_json().get('detalle')
     cita.estado = request.get_json().get('estado')

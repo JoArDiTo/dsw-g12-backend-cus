@@ -33,6 +33,7 @@ def insert_persona():
     telefono = data['telefono']
     fecha_nacimiento = data['fecha_nacimiento']
     sexo = data['sexo']
+    id_ubigeo = data['id_ubigeo']
     
     if Persona.query.get(documento):
         data = {
@@ -42,7 +43,7 @@ def insert_persona():
         
         return make_response(jsonify(data),400)
     
-    if documento==None or tipo_documento==None or nombre==None or apellido_paterno==None or apellido_materno==None or telefono==None or fecha_nacimiento==None or sexo==None:
+    if documento==None or tipo_documento==None or nombre==None or apellido_paterno==None or apellido_materno==None or telefono==None or fecha_nacimiento==None or sexo==None or id_ubigeo==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -50,7 +51,7 @@ def insert_persona():
         
         return make_response(jsonify(data),400)
     
-    persona = Persona(documento,tipo_documento,nombre,apellido_paterno,apellido_materno,telefono,fecha_nacimiento,sexo)
+    persona = Persona(documento,tipo_documento,nombre,apellido_paterno,apellido_materno,telefono,fecha_nacimiento,sexo,id_ubigeo)
     
     db.session.add(persona)
     db.session.commit()
@@ -83,6 +84,7 @@ def update_persona(documento):
     persona.telefono = request.json.get('telefono')
     persona.fecha_nacimiento = request.json.get('fecha_nacimiento')
     persona.sexo = request.json.get('sexo')
+    persona.id_ubigeo = request.json.get('id_ubigeo')
     
     db.session.commit()
     

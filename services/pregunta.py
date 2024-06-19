@@ -28,9 +28,8 @@ def insert():
     
     id_tipo_test = data.get('id_tipo_test')
     contenido = data.get('contenido')
-    invertido = data.get('invertido')
     
-    if id_tipo_test == None or contenido == None or invertido == None:
+    if id_tipo_test == None or contenido == None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -38,7 +37,7 @@ def insert():
         
         return make_response(jsonify(data), 400)
     
-    pregunta = Pregunta(id_tipo_test, contenido, invertido)
+    pregunta = Pregunta(id_tipo_test, contenido)
     db.session.add(pregunta)
     db.session.commit()
     
@@ -66,7 +65,6 @@ def update(id_pregunta):
     
     pregunta.id_tipo_test = request.get_json().get('id_tipo_test')
     pregunta.contenido = request.get_json().get('contenido')
-    pregunta.invertido = request.get_json().get('invertido')
     
     db.session.commit()
     

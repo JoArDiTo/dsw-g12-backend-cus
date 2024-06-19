@@ -81,9 +81,8 @@ def insert():
     documento = data.get('documento')
     correo = data.get('correo')
     password = data.get('password')
-    rol = data.get('rol')
     
-    if documento==None or correo==None or password==None or rol==None:
+    if documento==None or correo==None or password==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -91,7 +90,7 @@ def insert():
         
         return make_response(jsonify(data),400)
     
-    usuario = Usuario(documento,correo,password,rol)
+    usuario = Usuario(documento,correo,password)
     
     db.session.add(usuario)
     db.session.commit()
@@ -121,7 +120,6 @@ def update(id_usuario):
     #usuario.documento = request.json.get('documento')
     usuario.correo = request.json.get('correo')
     usuario.password = generate_password_hash(request.json.get('password'))
-    usuario.rol = request.json.get('rol')
     
     db.session.commit()
     

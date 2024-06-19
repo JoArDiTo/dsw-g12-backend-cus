@@ -30,8 +30,9 @@ def insert():
     minimo = data.get('minimo')
     maximo = data.get('maximo')
     interpretacion = data.get('interpretacion')
+    id_semaforo = data.get('id_semaforo')
     
-    if id_tipo_test==None or minimo==None or maximo==None or interpretacion==None:
+    if id_tipo_test==None or minimo==None or maximo==None or interpretacion==None or id_semaforo==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -39,7 +40,7 @@ def insert():
         
         return make_response(jsonify(data), 400)
 
-    clasificacion = Clasificacion(id_tipo_test, minimo, maximo, interpretacion)    
+    clasificacion = Clasificacion(id_tipo_test, minimo, maximo, interpretacion, id_semaforo)    
     db.session.add(clasificacion)
     db.session.commit()
     
@@ -69,6 +70,7 @@ def update(id_clasificacion):
     clasificacion.minimo = request.get_json().get('minimo')
     clasificacion.maximo = request.get_json().get('maximo')
     clasificacion.interpretacion = request.get_json().get('interpretacion')
+    clasificacion.id_semaforo = request.get_json().get('id_semaforo')
     
     db.session.commit()
     

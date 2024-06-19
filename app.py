@@ -2,17 +2,19 @@ from flask import Flask
 from utils.db import db
 from config import DATABASE_CONNECTION
 from flask_migrate import Migrate
+from services.ubigeo import ubigeos
 from services.persona import personas
 from services.usuario import usuarios
 from services.paciente import pacientes
 from services.especialista import especialistas
 from services.cita import citas
-from services.tratamiento import tratamientos
+from services.resultado_cita import resultados
 from services.tipo_test import tipos_test
 from services.test import tests
 from services.respuesta import respuestas
 from services.pregunta import preguntas
 from services.alternativa import alternativas
+from services.semaforo import semaforos
 from services.clasificacion import clasificaciones
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -31,17 +33,19 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}})
 app.config['SQLALCHEMY_DATABASE_URI']=DATABASE_CONNECTION
 db.init_app(app)
 
+app.register_blueprint(ubigeos)
 app.register_blueprint(personas)
 app.register_blueprint(usuarios)
 app.register_blueprint(pacientes)
 app.register_blueprint(especialistas)
 app.register_blueprint(citas)
-app.register_blueprint(tratamientos)
+app.register_blueprint(resultados)
 app.register_blueprint(tipos_test)
 app.register_blueprint(tests)
 app.register_blueprint(respuestas)
 app.register_blueprint(preguntas)
 app.register_blueprint(alternativas)
+app.register_blueprint(semaforos)
 app.register_blueprint(clasificaciones)
 
 with app.app_context():

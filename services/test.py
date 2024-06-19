@@ -30,9 +30,9 @@ def insert():
     id_paciente = data.get('id_paciente')
     resultado = data.get('resultado')
     interpretacion = data.get('interpretacion')
-    fecha = data.get('fecha')
+    color = data.get('color')
     
-    if id_tipo_test==None or id_paciente==None or resultado==None or interpretacion==None or fecha==None:
+    if id_tipo_test==None or id_paciente==None or resultado==None or interpretacion==None or color==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -40,7 +40,7 @@ def insert():
         
         return make_response(jsonify(data), 400)
 
-    test = Test(id_tipo_test, id_paciente, resultado, interpretacion, fecha)    
+    test = Test(id_tipo_test, id_paciente, resultado, interpretacion, color)    
     db.session.add(test)
     db.session.commit()
     
@@ -70,7 +70,7 @@ def update(id_test):
     test.id_paciente = request.get_json().get('id_paciente')
     test.resultado = request.get_json().get('resultado')
     test.interpretacion = request.get_json().get('interpretacion')
-    test.fecha = request.get_json().get('fecha')
+    test.color = request.get_json().get('color')
     
     db.session.commit()
     
