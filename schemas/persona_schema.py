@@ -6,7 +6,7 @@ class PersonaSchema(ma.Schema):
     class Meta:
         model = Persona
         fields = (
-            'id_persona',
+            'documento',
             'id_ubigeo',
             'nombres',
             'apellidos',

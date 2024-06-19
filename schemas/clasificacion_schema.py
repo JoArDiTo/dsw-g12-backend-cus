@@ -12,7 +12,7 @@ class ClasificacionSchema(ma.Schema):
             'minimo',
             'maximo',
             'interpretacion',
-            'tipo_test'
+            'tipo_test',
             'semaforo'
         )
         
