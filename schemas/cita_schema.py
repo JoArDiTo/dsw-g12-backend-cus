@@ -10,7 +10,6 @@ class CitaSchema(ma.Schema):
             'id_cita',
             'id_paciente',
             'id_especialista',
-            'fecha',
             'motivo',
             'detalle',
             'estado',

@@ -13,6 +13,10 @@ class TestSchema(ma.Schema):
           'resultado',
           'interpretacion',
           'fecha',
+          'color',
+          'ansiedad_consignada',
+          'observaciones',
+          'consignado'
           'tipo_test',
           'paciente'
         )
