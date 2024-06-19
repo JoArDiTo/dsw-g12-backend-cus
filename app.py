@@ -8,7 +8,6 @@ from services.paciente import pacientes
 from services.especialista import especialistas
 from services.cita import citas
 from services.tratamiento import tratamientos
-from services.diagnostico import diagnosticos
 from services.tipo_test import tipos_test
 from services.test import tests
 from services.respuesta import respuestas
@@ -38,7 +37,6 @@ app.register_blueprint(pacientes)
 app.register_blueprint(especialistas)
 app.register_blueprint(citas)
 app.register_blueprint(tratamientos)
-app.register_blueprint(diagnosticos)
 app.register_blueprint(tipos_test)
 app.register_blueprint(tests)
 app.register_blueprint(respuestas)

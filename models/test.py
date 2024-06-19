@@ -12,13 +12,21 @@ class Test(db.Model):
     id_paciente = db.Column(db.Integer, db.ForeignKey('paciente.id_paciente'))
     resultado = db.Column(db.Integer)
     interpretacion = db.Column(db.String(255))
-    fecha = db.Column(db.Date)
+    fecha = db.Column(db.DateTime)
+    color = db.Column(db.String(6))
+    ansiedad_consignada = db.Column(db.String(255))
+    observaciones = db.Column(db.String(255))
+    consignado = db.Column(db.Boolean)
     
     respuesta = db.relationship('Respuesta', backref='test', cascade='all, delete-orphan')
     
-    def __init__(self,id_tipo_test,id_paciente,resultado,interpretacion,fecha):
+    def __init__(self,id_tipo_test,id_paciente,resultado,interpretacion,fecha, color):
         self.id_tipo_test = id_tipo_test
         self.id_paciente = id_paciente
         self.resultado = resultado
         self.interpretacion = interpretacion
         self.fecha = fecha
+        self.color = color
+        self.ansiedad_consignada = "Por consignar"
+        self.observaciones = "Por detallar"
+        self.consignado = False

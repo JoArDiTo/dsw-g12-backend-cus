@@ -10,17 +10,15 @@ class Cita(db.Model):
     id_cita = db.Column(db.Integer, primary_key=True)
     id_paciente = db.Column(db.Integer, db.ForeignKey('paciente.id_paciente'))
     id_especialista = db.Column(db.Integer, db.ForeignKey('especialista.id_especialista'))
-    fecha = db.Column(db.Date)
     motivo = db.Column(db.String(255))
     detalle = db.Column(db.String(255))
-    estado = db.Column(db.String(12)) # pendiente, cancelada, realizada
+    estado = db.Column(db.String(12)) # En espera, cancelada, realizada
     
-    #
+    resultado_cita = db.relationship('ResultadoCita', backref='cita', cascade='all, delete-orphan')
     
-    def __init__(self,id_paciente,id_especialista,fecha,motivo,detalle,estado):
+    def __init__(self,id_paciente,id_especialista,motivo,detalle):
         self.id_paciente = id_paciente
         self.id_especialista = id_especialista
-        self.fecha = fecha
         self.motivo = motivo
         self.detalle = detalle
-        self.estado = estado
+        self.estado = 'En espera'

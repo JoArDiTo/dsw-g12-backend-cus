@@ -11,13 +11,11 @@ class Usuario(db.Model):
     documento = db.Column(db.String(15), db.ForeignKey('persona.documento'))
     correo = db.Column(db.String(60))
     password = db.Column(db.String(255))
-    rol = db.Column(db.String(12)) # paciente, especialista, administrador
     
     paciente = db.relationship('Paciente', backref='usuario', cascade="all,delete, delete-orphan")
     especialista = db.relationship('Especialista', backref='usuario', cascade="all,delete, delete-orphan")
     
-    def __init__(self,documento,correo,password,rol):
+    def __init__(self,documento,correo,password):
         self.documento = documento
         self.correo = correo
         self.password = generate_password_hash(password)
-        self.rol = rol
