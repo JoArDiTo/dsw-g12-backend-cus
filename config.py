@@ -10,4 +10,3 @@ host=os.getenv("HOST")
 database=os.getenv("DATABASE")
 
 DATABASE_CONNECTION=f'{server}://{user}:{password}@{host}/{database}'
-DATABASE_CONNECTION="postgresql://postgres:74582614@localhost/sisvita4-local"

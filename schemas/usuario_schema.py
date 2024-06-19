@@ -1,25 +1,21 @@
 from utils.ma import ma
 from marshmallow import fields
 from models.usuario import Usuario
-from schemas.tipo_rol_schema import TipoRolSchema
+from schemas.persona_schema import PersonaSchema
 
 class UsuarioSchema(ma.Schema):    
     class Meta:
         model = Usuario
         fields = (
+            'id_usuario',
             'documento',
-            'tipo_documento',
-            'id_tipo_rol',
-            'nombre',
-            'apellido_paterno',
-            'apellido_materno',
-            'telefono',
             'correo',
             'password',
-            'tipo_rol'
+            'rol',
+            'persona'
         )
     
-    tipo_rol = ma.Nested(TipoRolSchema)
+    persona = ma.Nested(PersonaSchema)
     
 usuario_schema = UsuarioSchema()
 usuarios_schema = UsuarioSchema(many=True)

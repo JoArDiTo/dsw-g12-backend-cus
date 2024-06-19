@@ -9,6 +9,7 @@ alternativas = Blueprint('alternativas', __name__)
 @alternativas.route('/alternativas/get', methods=['GET'])
 @jwt_required()
 def get_alternativas():
+    result = {}
     alternativas = Alternativa.query.all()
     result = alternativas_schema.dump(alternativas)
     
@@ -24,11 +25,12 @@ def get_alternativas():
 @jwt_required()
 def insert():
     data = request.get_json()
+    
     id_tipo_test = data.get('id_tipo_test')
-    texto = data.get('texto')
+    contenido = data.get('contenido')
     puntaje = data.get('puntaje')
     
-    if id_tipo_test==None or not texto or puntaje==None:
+    if id_tipo_test==None or contenido==None or puntaje==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -36,48 +38,45 @@ def insert():
         
         return make_response(jsonify(data), 400)
     
-    alternativa = Alternativa(id_tipo_test, texto, puntaje)
+    alternativa = Alternativa(id_tipo_test, contenido, puntaje)
     db.session.add(alternativa)
     db.session.commit()
-    
-    result = alternativa_schema.dump(alternativa)
     
     data = {
         'message': 'Alternativa creada con éxito',
         'status': 201,
-        'data': result
+        'data': alternativa_schema.dump(alternativa)
     }
     
-    return make_response(jsonify(result), 201)
+    return make_response(jsonify(data), 201)
 
-@alternativas.route('/alternativas/update/<int:id>', methods=['PUT'])
+# LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
+@alternativas.route('/alternativas/update/<int:id_alternativa>', methods=['PUT'])
 @jwt_required()
-def update(id):
-    data = request.get_json()
-    alternativa = Alternativa.query.get(id)
+def update(id_alternativa):
+    alternativa = Alternativa.query.get(id_alternativa)
     
-    if alternativa:
-        alternativa.id_tipo_test = data.get('id_tipo_test')
-        alternativa.texto = data.get('texto')
-        alternativa.puntaje = data.get('puntaje')
-        db.session.commit()
-        
-        result = alternativa_schema.dump(alternativa)
-        
+    if alternativa == None:
         data = {
-            'message': 'Alternativa actualizada con éxito',
-            'status': 200,
-            'data': result
+            'message': 'Alternativa no encontrada',
+            'status': 404
         }
         
-        return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 404)
+    
+    alternativa.id_tipo_test = request.get_json().get('id_tipo_test')
+    alternativa.contenido = request.get_json().get('contenido')
+    alternativa.puntaje = request.get_json().get('puntaje')
+    
+    db.session.commit()
     
     data = {
-        'message': 'Alternativa no encontrada',
-        'status': 404
+        'message': 'Alternativa actualizada con éxito',
+        'status': 200,
+        'data': alternativa_schema.dump(alternativa)
     }
     
-    return make_response(jsonify(data), 404)
+    return make_response(jsonify(data), 200)
 
 @alternativas.route('/alternativas/delete/<int:id>', methods=['DELETE'])
 @jwt_required()
@@ -97,7 +96,8 @@ def delete(id):
     
     data = {
         'message': 'Alternativa no encontrada',
-        'status': 404
+        'status': 404,
+        'alternativa': alternativa_schema.dump(alternativa)
     }
     
     return make_response(jsonify(data), 404)

@@ -8,7 +8,8 @@ class PreguntaSchema(ma.Schema):
     fields = (
       'id_pregunta',
       'id_tipo_test',
-      'descripcion',
+      'contenido',
+      'invertido',
       'tipo_test'
     )
     

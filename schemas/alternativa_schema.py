@@ -1,6 +1,6 @@
 from utils.ma import ma
 from models.alternativa import Alternativa
-from schemas.tipo_rol_schema import TipoRolSchema
+from schemas.tipo_test_schema import TipoTestSchema
 
 class AlternativaSchema(ma.Schema):
     class Meta:
@@ -8,12 +8,12 @@ class AlternativaSchema(ma.Schema):
         fields = (
         'id_alternativa',
         'id_tipo_test',
-        'texto',
+        'contenido',
         'puntaje',
-        'pregunta'
+        'tipo_test'
         )
         
-    pregunta = ma.Nested(TipoRolSchema)
+    tipo_test = ma.Nested(TipoTestSchema)
     
 alternativa_schema = AlternativaSchema()
 alternativas_schema = AlternativaSchema(many=True)

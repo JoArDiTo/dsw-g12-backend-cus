@@ -9,6 +9,7 @@ tipos_test = Blueprint('tipos_test', __name__)
 @tipos_test.route('/tipos/get', methods=['GET'])
 @jwt_required()
 def get_tipos_test():
+    result = {}
     tipos_test = TipoTest.query.all()
     result = tipos_test_schema.dump(tipos_test)
     
@@ -24,10 +25,12 @@ def get_tipos_test():
 @jwt_required()
 def insert():
     data = request.get_json()
+    
     nombre = data.get('nombre')
+    autor = data.get('autor')
     descripcion = data.get('descripcion')
     
-    if not nombre:
+    if nombre == None or autor == None or descripcion == None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -35,68 +38,66 @@ def insert():
         
         return make_response(jsonify(data), 400)
     
-    tipo_test = TipoTest(nombre, descripcion)
+    tipo_test = TipoTest(nombre, autor, descripcion)
     db.session.add(tipo_test)
     db.session.commit()
-    
-    result = tipo_test_schema.dump(tipo_test)
     
     data = {
         'message': 'Tipo de test creado con éxito',
         'status': 201,
-        'data': result
+        'tipo_test': tipo_test_schema.dump(tipo_test)
     }
     
-    return make_response(jsonify(result))
+    return make_response(jsonify(data), 201)
 
-@tipos_test.route('/tipos/update/<int:id>', methods=['PUT'])
+#LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
+@tipos_test.route('/tipos/update/<int:id_tipo_test>', methods=['PUT'])
 @jwt_required()
-def update(id):
-    data = request.get_json()
-    tipo_test = TipoTest.query.get(id)
+def update(id_tipo_test):
+    tipo_test = TipoTest.query.get(id_tipo_test)
     
-    if tipo_test:
-        tipo_test.nombre = data.get('nombre')
-        tipo_test.descripcion = data.get('descripcion')
-        db.session.commit()
-        
-        result = tipo_test_schema.dump(tipo_test)
-        
+    if tipo_test==None:
         data = {
-            'message': 'Tipo de test actualizado con éxito',
-            'status': 200,
-            'data': result
+            'message': 'Tipo de test no encontrado',
+            'status': 400
         }
         
-        return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 400)
+    
+    tipo_test.nombre = request.get_json().get('nombre')
+    tipo_test.autor = request.get_json().get('autor')
+    tipo_test.descripcion = request.get_json().get('descripcion')
+    
+    db.session.commit()
     
     data = {
-        'message': 'No se encontró el tipo de test',
-        'status': 404
+        'message': 'Tipo de test actualizado con éxito',
+        'status': 200,
+        'tipo_test': tipo_test_schema.dump(tipo_test)
     }
     
-    return make_response(jsonify(data), 404)
-        
+    return make_response(jsonify(data), 200)
 
-@tipos_test.route('/tipos/delete/<int:id>', methods=['DELETE'])
+@tipos_test.route('/tipos/delete/<int:id_tipo_test>', methods=['DELETE'])
 @jwt_required()
-def delete(id):
-    tipo_test = TipoTest.query.get(id)
+def delete(id_tipo_test):
+    tipo_test = TipoTest.query.get(id_tipo_test)
     
-    if tipo_test:
-        db.session.delete(tipo_test)
-        db.session.commit()
-        
+    if tipo_test==None:
         data = {
-            'message': 'Tipo de test eliminado con éxito',
-            'status': 200
+            'message': 'Tipo de test no encontrado',
+            'status': 400
         }
         
-        return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 400)
+    
+    db.session.delete(tipo_test)
+    db.session.commit()
     
     data = {
-        'message': 'No se encontró el tipo de test',
-        'status': 404
+        'message': 'Tipo de test eliminado con éxito',
+        'status': 200,
+        'tipo_test': tipo_test_schema.dump(tipo_test)
     }
     
-    return make_response(jsonify(data), 404)
+    return make_response(jsonify(data), 200)

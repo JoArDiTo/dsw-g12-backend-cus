@@ -9,6 +9,7 @@ respuestas = Blueprint('respuestas', __name__)
 @respuestas.route('/respuestas/get', methods=['GET'])
 @jwt_required()
 def get_respuestas():
+    result = {}
     respuestas = Respuesta.query.all()
     result = respuestas_schema.dump(respuestas)
     
@@ -24,12 +25,12 @@ def get_respuestas():
 @jwt_required()
 def insert():
     data = request.get_json()
-    id_test = data.get('id_test')
-    pregunta = data.get('pregunta')
-    respuesta = data.get('respuesta')
-    puntaje = data.get('puntaje')
     
-    if not id_test or not pregunta or not respuesta or puntaje==None:
+    id_test = data.get('id_test')
+    id_pregunta = data.get('id_pregunta')
+    id_alternativa = data.get('id_alternativa')
+    
+    if id_test==None or id_pregunta==None or id_alternativa==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -37,71 +38,65 @@ def insert():
         
         return make_response(jsonify(data), 400)
     
-    respuesta = Respuesta(id_test, pregunta, respuesta, puntaje)
+    respuesta = Respuesta(id_test, id_pregunta, id_alternativa)
     db.session.add(respuesta)
     db.session.commit()
-    
-    result = respuesta_schema.dump(respuesta)
     
     data = {
         'message': 'Respuesta creada con éxito',
         'status': 201,
-        'data': result
+        'data': respuesta_schema.dump(respuesta)
     }
     
-    return make_response(jsonify(result), 201)
+    return make_response(jsonify(data), 201)
 
-@respuestas.route('/respuestas/update/<int:id>', methods=['PUT'])
+# LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
+@respuestas.route('/respuestas/update/<int:id_respuesta>', methods=['PUT'])
 @jwt_required()
-def update(id):
-    data = request.get_json()
-    respuesta = Respuesta.query.get(id)
+def update(id_respuesta):
+    respuesta = Respuesta.query.get(id_respuesta)
     
-    if respuesta:
-        respuesta.id_test = data.get('id_test')
-        respuesta.pregunta = data.get('pregunta')
-        respuesta.respuesta = data.get('respuesta')
-        respuesta.puntaje = data.get('puntaje')
-        db.session.commit()
-        
-        result = respuesta_schema.dump(respuesta)
-        
+    if respuesta == None:
         data = {
-            'message': 'Respuesta actualizada con éxito',
-            'status': 200,
-            'data': result
+            'message': 'No se encontró la respuesta',
+            'status': 404
         }
         
-        return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 404)
+    
+    respuesta.id_test = request.json.get('id_test')
+    respuesta.id_pregunta = request.json.get('id_pregunta')
+    respuesta.id_alternativa = request.json.get('id_alternativa')
+    
+    db.session.commit()
     
     data = {
-        'message': 'Respuesta no encontrada',
-        'status': 404
+        'message': 'Respuesta actualizada con éxito',
+        'status': 200,
+        'data': respuesta_schema.dump(respuesta)
     }
     
-    return make_response(jsonify(data), 404)
-
-#UNA RESPUESTA NO PUEDE SER BORRADA, DEBIDO A QUE QUEDA REGISTRADA
-
-@respuestas.route('/respuestas/delete/<int:id>', methods=['DELETE'])
-@jwt_required()
-def delete(id):
-    respuesta = Respuesta.query.get(id)
+    return make_response(jsonify(data), 200)
     
-    if respuesta:
-        db.session.delete(respuesta)
-        db.session.commit()
-        
+@respuestas.route('/respuestas/delete/<int:id_alternativa>', methods=['DELETE'])
+@jwt_required()
+def delete(id_alternativa):
+    respuesta = Respuesta.query.get(id_alternativa)
+    
+    if respuesta == None:
         data = {
-            'message': 'Respuesta eliminada con éxito',
-            'status': 200
+            'message': 'Respuesta no encontrada',
+            'status': 404
         }
         
-        return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 404)
+    
+    db.session.delete(respuesta)
     
     data = {
-        'message': 'No se encontró la respuesta',
-        'status': 404
+        'message': 'Respuesta eliminada con éxito',
+        'status': 200,
+        'data': respuesta_schema.dump(respuesta)
     }
     
-    return make_response(jsonify(data), 404)
+    return make_response(jsonify(data), 200)

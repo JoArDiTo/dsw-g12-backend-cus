@@ -9,6 +9,7 @@ tests = Blueprint('tests', __name__)
 @tests.route('/tests/get', methods=['GET'])
 @jwt_required()
 def get_tests():
+    result = {}
     tests = Test.query.all()
     result = tests_schema.dump(tests)
     
@@ -24,85 +25,83 @@ def get_tests():
 @jwt_required()
 def insert():
     data = request.get_json()
-    id_evaluacion = data.get('id_evaluacion')
-    id_tipo_test = data.get('id_tipo_test')
-    puntaje_total = data.get('puntaje_total')
-    diagnostico = data.get('diagnostico')
     
-    if not id_evaluacion or not id_tipo_test: #Diagnóstico y puntaje total puede ser nulo
+    id_tipo_test = data.get('id_tipo_test')
+    id_paciente = data.get('id_paciente')
+    resultado = data.get('resultado')
+    interpretacion = data.get('interpretacion')
+    fecha = data.get('fecha')
+    
+    if id_tipo_test==None or id_paciente==None or resultado==None or interpretacion==None or fecha==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
         }
         
         return make_response(jsonify(data), 400)
-    
-    test = Test(id_evaluacion, id_tipo_test, puntaje_total, diagnostico)
+
+    test = Test(id_tipo_test, id_paciente, resultado, interpretacion, fecha)    
     db.session.add(test)
     db.session.commit()
-    
-    result = test_schema.dump(test)
     
     data = {
         'message': 'Test creado con éxito',
         'status': 201,
-        'data': result
+        'data': test_schema.dump(test)
     }
     
-    return make_response(jsonify(result), 201) 
+    return make_response(jsonify(data), 201) 
 
-@tests.route('/tests/update/<int:id>', methods=['PUT'])
+# LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
+@tests.route('/tests/update/<int:id_test>', methods=['PUT'])
 @jwt_required()
-def update(id):
-    data = request.get_json()
-    test = Test.query.get(id)
+def update(id_test):
+    test = Test.query.get(id_test)
     
-    if test:
-        test.id_evaluacion = data.get('id_evaluacion')
-        test.id_tipo_test = data.get('id_tipo_test')
-        if data.get('puntaje_total'):
-            test.puntaje_total = data.get('puntaje_total')
-        if data.get('diagnostico'):
-            test.diagnostico = data.get('diagnostico')
-        db.session.commit()
-        
-        result = test_schema.dump(test)
-        
+    if test == None:
         data = {
-            'message': 'Test actualizado con éxito',
-            'status': 200,
-            'data': result
+            'message': 'Test no encontrado',
+            'status': 404
         }
         
-        return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 404)
+    
+    test.id_tipo_test = request.get_json().get('id_tipo_test')
+    test.id_paciente = request.get_json().get('id_paciente')
+    test.resultado = request.get_json().get('resultado')
+    test.interpretacion = request.get_json().get('interpretacion')
+    test.fecha = request.get_json().get('fecha')
+    
+    db.session.commit()
     
     data = {
-        'message': 'Test no encontrado',
-        'status': 404
+        'message': 'Test actualizado con éxito',
+        'status': 200,
+        'data': test_schema.dump(test)
     }
     
-    return make_response(jsonify(data), 404)
+    return make_response(jsonify(data), 200)
 
-#NO SE PUEDE ELIMINAR UN TEST PORQUE SE PIERDE LA RELACIÓN CON LAS PREGUNTAS Y RESPUESTAS
-@tests.route('/tests/delete/<int:id>', methods=['DELETE'])
+@tests.route('/tests/delete/<int:id_test>', methods=['DELETE'])
 @jwt_required()
-def delete(id):
-    test = Test.query.get(id)
+def delete(id_test):
+    test = Test.query.get(id_test)
     
-    if test:
-        db.session.delete(test)
-        db.session.commit()
-        
+    if test == None:
         data = {
-            'message': 'Test eliminado con éxito',
-            'status': 200
+            'message': 'Test no encontrado',
+            'status': 404
         }
         
-        return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 404)
+    
+    db.session.delete(test)
+    db.session.commit()
     
     data = {
-        'message': 'Test no encontrado',
-        'status': 404
+        'message': 'Test eliminado con éxito',
+        'status': 200,
+        'data': test_schema.dump(test)
     }
     
-    return make_response(jsonify(data), 404)
+    return make_response(jsonify(data), 200)

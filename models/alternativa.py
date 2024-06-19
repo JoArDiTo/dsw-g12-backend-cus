@@ -8,10 +8,12 @@ class Alternativa(db.Model):
     
     id_alternativa = db.Column(db.Integer, primary_key=True)
     id_tipo_test = db.Column(db.Integer, db.ForeignKey('tipo_test.id_tipo_test'))
-    texto = db.Column(db.String(100))
+    contenido = db.Column(db.String(255))
     puntaje = db.Column(db.Integer)
     
-    def __init__(self, id_tipo_test, texto, puntaje):
+    respuesta = db.relationship('Respuesta', backref='alternativa', cascade='all, delete-orphan')
+    
+    def __init__(self, id_tipo_test, contenido,puntaje):
         self.id_tipo_test = id_tipo_test
-        self.texto = texto
+        self.contenido = contenido
         self.puntaje = puntaje

@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify, make_response
 from models.usuario import Usuario
-from models.tipo_rol import TipoRol
 from utils.db import db
 from schemas.usuario_schema import usuario_schema, usuarios_schema
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -30,14 +29,31 @@ def login():
         }
         return make_response(jsonify(data), 400)
     
-    rol = TipoRol.query.get(usuario.id_tipo_rol)
     
-    claims = {"rol": rol.descripcion}
     
     data = {
         'message': 'Inicio de sesión exitoso',
-        'access_token': create_access_token(identity=usuario.documento, additional_claims=claims),
+        'access_token': create_access_token(identity=usuario.documento, additional_claims={"id_usuario": usuario.id_usuario, "rol": usuario.rol}),
         'refresh_token': create_refresh_token(identity=usuario.documento),
+    }
+    
+    return make_response(jsonify(data), 200)
+
+@usuarios.route('/usuarios/validator', methods=['GET'])
+def validator_email():
+    correo = request.args.get('correo')
+    usuario = Usuario.query.filter_by(correo=correo).first()
+    
+    if usuario:
+        data = {
+            'message': 'Correo ya registrado',
+            'status': 400
+        }
+        return make_response(jsonify(data), 400)
+    
+    data = {
+        'message': 'Correo disponible',
+        'status': 200
     }
     
     return make_response(jsonify(data), 200)
@@ -61,81 +77,67 @@ def get_usuarios():
 #NO SE DEBE REQUERIR JWT PARA CREAR UN USUARIO
 def insert():
     data = request.get_json()
+    
     documento = data.get('documento')
-    tipo_documento = data.get('tipo_documento')
-    nombre = data.get('nombre')
-    apellido_paterno = data.get('apellido_paterno')
-    apellido_materno = data.get('apellido_materno')
-    telefono = data.get('telefono')
     correo = data.get('correo')
     password = data.get('password')
-    id_tipo_rol = data.get('id_tipo_rol')
+    rol = data.get('rol')
     
-    if Usuario.query.get(documento):
-        data = {
-            'message': 'Documento ya registrado',
-            'status': 400
-        }
-        return make_response(jsonify(data), 400)
-
-    if not documento or not tipo_documento or not nombre or not apellido_paterno or not apellido_materno or not telefono or not correo or not password or not id_tipo_rol:
+    if documento==None or correo==None or password==None or rol==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
         }
         
-        return make_response(jsonify(data), 400)
-
-    new_usuario = Usuario(documento,tipo_documento,nombre,apellido_paterno,apellido_materno,telefono,correo,password,id_tipo_rol)    
-    db.session.add(new_usuario)
-    db.session.commit()
+        return make_response(jsonify(data),400)
     
-    result = usuario_schema.dump(new_usuario)
+    usuario = Usuario(documento,correo,password,rol)
+    
+    db.session.add(usuario)
+    db.session.commit()
     
     data = {
-        'message': 'Usuario creada con éxito',
-        'status': 201,
-        'data': result
+        'message': 'Usuario creado con éxito',
+        'status': 200,
+        'usuario': usuario_schema.dump(usuario)
     }
     
-    return make_response(jsonify(result),201)
+    return make_response(jsonify(data),200)
 
-@usuarios.route('/usuarios/update/<string:documento>', methods=['PUT'])
+@usuarios.route('/usuarios/update/<int:id_usuario>', methods=['PUT'])
 @jwt_required()
-def update(documento):
-    result = {}
-    data = request.get_json()
-    usuario = Usuario.query.get(documento)
+def update(id_usuario):    
+    usuario = Usuario.query.get(id_usuario)
     
-    if not usuario:
-        result['message'] = 'Usuario no encontrada'
-        result['status'] = 404
-        return make_response(jsonify(result), 404)
+    if usuario==None:
+        data = {
+            'message': 'Usuario no encontrada',
+            'status': 400
+        }
+        
+        return make_response(jsonify(data), 404)
     
-    usuario.nombre = data.get('nombre')
-    usuario.apellido_paterno = data.get('apellido_paterno')
-    usuario.apellido_materno = data.get('apellido_materno')
-    usuario.telefono = data.get('telefono')
-    usuario.correo = data.get('correo')
-    usuario.password = generate_password_hash(data.get('password'))
+    #usuario.id_usuario = request.json.get('id_usuario')
+    #usuario.documento = request.json.get('documento')
+    usuario.correo = request.json.get('correo')
+    usuario.password = generate_password_hash(request.json.get('password'))
+    usuario.rol = request.json.get('rol')
     
     db.session.commit()
-    
-    result = usuario_schema.dump(usuario)
     
     data = {
         'message': 'Usuario actualizada con éxito',
         'status': 200,
-        'data': result
+        'data': usuario_schema.dump(usuario)
     }
     
     return make_response(jsonify(data), 200)
 
 
-@usuarios.route('/usuarios/delete/<string:documento>', methods=['DELETE'])
+@usuarios.route('/usuarios/delete/<int:id_usuario>', methods=['DELETE'])
 @jwt_required()
-def delete(documento):
-    usuario = Usuario.query.get(documento)
+def delete(id_usuario):
+    usuario = Usuario.query.get(id_usuario)
     
     if not usuario:
         data = {
@@ -144,15 +146,13 @@ def delete(documento):
         }
         return make_response(jsonify(data), 404)
     
-    result = usuario_schema.dump(usuario)
-    
     db.session.delete(usuario)
     db.session.commit()
     
     data = {
         'message': 'Usuario eliminada con éxito',
         'status': 200,
-        'data': result
+        'data': usuario_schema.dump(usuario)
     }
     
     return make_response(jsonify(data), 200)

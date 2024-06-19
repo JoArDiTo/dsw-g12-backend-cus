@@ -9,6 +9,7 @@ preguntas = Blueprint('preguntas', __name__)
 @preguntas.route('/preguntas/get', methods=['GET'])
 @jwt_required()
 def get_preguntas():
+    result = {}
     preguntas = Pregunta.query.all()
     result = preguntas_schema.dump(preguntas)
     
@@ -24,10 +25,12 @@ def get_preguntas():
 @jwt_required()
 def insert():
     data = request.get_json()
-    id_tipo_test = data.get('id_tipo_test')
-    descripcion = data.get('descripcion')
     
-    if not id_tipo_test or not descripcion:
+    id_tipo_test = data.get('id_tipo_test')
+    contenido = data.get('contenido')
+    invertido = data.get('invertido')
+    
+    if id_tipo_test == None or contenido == None or invertido == None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -35,67 +38,66 @@ def insert():
         
         return make_response(jsonify(data), 400)
     
-    pregunta = Pregunta(id_tipo_test, descripcion)
+    pregunta = Pregunta(id_tipo_test, contenido, invertido)
     db.session.add(pregunta)
     db.session.commit()
-    
-    result = pregunta_schema.dump(pregunta)
     
     data = {
         'message': 'Pregunta creada con éxito',
         'status': 201,
-        'data': result
+        'data': pregunta_schema.dump(pregunta)
     }
     
-    return make_response(jsonify(result))
+    return make_response(jsonify(data))
 
-@preguntas.route('/preguntas/update/<int:id>', methods=['PUT'])
+#LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
+@preguntas.route('/preguntas/update/<int:id_pregunta>', methods=['PUT'])
 @jwt_required()
-def update(id):
-    data = request.get_json()
-    pregunta = Pregunta.query.get(id)
+def update(id_pregunta):
+    pregunta = Pregunta.query.get(id_pregunta)
     
-    if pregunta:
-        pregunta.id_tipo_test = data.get('id_tipo_test')
-        pregunta.descripcion = data.get('descripcion')
-        db.session.commit()
-        
-        result = pregunta_schema.dump(pregunta)
-        
+    if pregunta==None:
         data = {
-            'message': 'Pregunta actualizada con éxito',
-            'status': 200,
-            'data': result
+            'message': 'No se encontró la pregunta',
+            'status': 404
         }
         
-        return make_response(jsonify(data), 200)
-        
+        return make_response(jsonify(data), 404)
+    
+    pregunta.id_tipo_test = request.get_json().get('id_tipo_test')
+    pregunta.contenido = request.get_json().get('contenido')
+    pregunta.invertido = request.get_json().get('invertido')
+    
+    db.session.commit()
+    
     data = {
-        'message': 'No se encontró la pregunta',
-        'status': 404
+        'message': 'Pregunta actualizada con éxito',
+        'status': 200,
+        'data': pregunta_schema.dump(pregunta)
     }
     
-    return make_response(jsonify(data), 404)
+    return make_response(jsonify(data), 200)
 
-@preguntas.route('/preguntas/delete/<int:id>', methods=['DELETE'])
+@preguntas.route('/preguntas/delete/<int:id_pregunta>', methods=['DELETE'])
 @jwt_required()
-def delete(id):
-    pregunta = Pregunta.query.get(id)
+def delete(id_pregunta):
+    pregunta = Pregunta.query.get(id_pregunta)
     
-    if pregunta:
-        db.session.delete(pregunta)
-        db.session.commit()
-        
+    if pregunta == None:
         data = {
-            'message': 'Pregunta eliminada con éxito',
-            'status': 200
+            'message': 'No se encontró la pregunta',
+            'status': 404
         }
         
-        return make_response(jsonify(data), 200)
-        
+        return make_response(jsonify(data), 404)
+    
+    db.session.delete(pregunta)
+    db.session.commit()
+    
     data = {
-        'message': 'No se encontró la pregunta',
-        'status': 404
+        'message': 'Pregunta eliminada con éxito',
+        'status': 200,
+        'data': pregunta_schema.dump(pregunta)
     }
     
-    return make_response(jsonify(data), 404)
+    return make_response(jsonify(data), 200)

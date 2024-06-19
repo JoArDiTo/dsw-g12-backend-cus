@@ -6,10 +6,12 @@ class EspecialistaSchema(ma.Schema):
     class Meta:
         model = Especialista
         fields = (
-            "id_especialista",
-            "documento",
-            "numero_de_colegiatura",
-            "usuario")
+            'id_especialista',
+            'id_usuario',
+            'licencia',
+            'especialidad',
+            'usuario'
+        )
 
     usuario = ma.Nested(UsuarioSchema)
 
