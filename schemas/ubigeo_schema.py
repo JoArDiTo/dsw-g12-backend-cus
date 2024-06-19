@@ -7,7 +7,7 @@ class UbigeoSchema(ma.Schema):
     provincia = fields.String()
     distrito = fields.String()
     superficie = fields.Float()
-    altitud = fields.Float()
+    altitud = fields.Float() 
     latitud = fields.Float()
     
 ubigeo_schema = UbigeoSchema()
