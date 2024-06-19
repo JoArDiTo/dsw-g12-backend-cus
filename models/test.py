@@ -27,7 +27,7 @@ class Test(db.Model):
         self.resultado = resultado
         self.interpretacion = interpretacion
         self.color = color
-        self.fecha = datetime.datetime.now()
+        self.fecha = datetime.datetime.now().strftime("%Y-%m-%d")
         self.ansiedad_consignada = "Por consignar"
         self.observaciones = "Por detallar"
         self.consignado = False
