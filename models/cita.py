@@ -14,11 +14,11 @@ class Cita(db.Model):
     detalle = db.Column(db.String(255))
     estado = db.Column(db.String(12)) # En espera, cancelada, realizada
     
-    resultado_cita = db.relationship('ResultadoCita', backref='cita', cascade='all, delete-orphan')
+    resultado_cita = db.relationship('ResultadoCita', backref='cita', cascade='all, delete-orphan')  
     
-    def __init__(self,id_paciente,id_especialista,motivo,detalle):
+    def __init__(self,id_paciente,id_especialista,motivo,detalle,estado):
         self.id_paciente = id_paciente
         self.id_especialista = id_especialista
         self.motivo = motivo
         self.detalle = detalle
-        self.estado = 'En espera'
+        self.estado = estado

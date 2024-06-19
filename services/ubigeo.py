@@ -23,7 +23,7 @@ def get_ubigeos():
     return make_response(jsonify(data),200)
 
 @ubigeos.route('/ubigeos/insert', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def insert():
     data = request.get_json()
     

@@ -47,7 +47,7 @@ def insert():
         'data': pregunta_schema.dump(pregunta)
     }
     
-    return make_response(jsonify(data))
+    return make_response(jsonify(data), 201)
 
 #LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
 @preguntas.route('/preguntas/update/<int:id_pregunta>', methods=['PUT'])

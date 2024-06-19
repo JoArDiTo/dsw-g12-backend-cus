@@ -32,7 +32,11 @@ def insert():
     detalle = data.get('detalle')
     estado = data.get('estado')
     
+    if not estado:
+        estado = 'En espera'
+
     cita = Cita(id_paciente, id_especialista, motivo, detalle, estado)
+
     db.session.add(cita)
     db.session.commit()
     

@@ -33,7 +33,7 @@ def login():
     
     data = {
         'message': 'Inicio de sesión exitoso',
-        'access_token': create_access_token(identity=usuario.documento, additional_claims={"id_usuario": usuario.id_usuario, "rol": usuario.rol}),
+        'access_token': create_access_token(identity=usuario.documento, additional_claims={"id_usuario": usuario.id_usuario}),
         'refresh_token': create_refresh_token(identity=usuario.documento),
     }
     
