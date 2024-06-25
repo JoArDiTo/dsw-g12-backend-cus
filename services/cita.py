@@ -48,13 +48,12 @@ def insert():
     
     return make_response(jsonify(data), 201)
 
-#LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
 @citas.route('/citas/update/<int:id_cita>', methods=['PUT'])
 @jwt_required()
 def update(id_cita):
     cita = Cita.query.get(id_cita)
     
-    if cita==None:
+    if not cita:
         data = {
             'message': 'Cita no encontrada',
             'status': 400
@@ -89,14 +88,13 @@ def delete(id_cita):
             'status': 404
         }
         return make_response(jsonify(data), 404)
-    
+
     db.session.delete(cita)
     db.session.commit()
     
     data = {
         'message': 'Cita eliminada con exito',
-        'status': 200,
-        'cita': cita_schema.dump(cita)
+        'status': 200
     }
     
     return make_response(jsonify(data), 200)
