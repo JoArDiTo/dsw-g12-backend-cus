@@ -22,3 +22,4 @@ class Cita(db.Model):
         self.motivo = motivo
         self.detalle = detalle
         self.estado = estado
+        
