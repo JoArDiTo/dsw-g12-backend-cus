@@ -21,6 +21,26 @@ def get_personas():
     
     return make_response(jsonify(data),200)
 
+@personas.route('/personas/get/<string:documento>', methods=['GET'])
+def get_persona(documento):
+    persona = Persona.query.get(documento)
+    
+    if persona==None:
+        data = {
+            'message': 'Persona no encontrada',
+            'status': 400
+        }
+        
+        return make_response(jsonify(data),400)
+    
+    data = {
+        'message': 'Persona encontrada con éxito',
+        'status': 200,
+        'persona': persona_schema.dump(persona)
+    }
+    
+    return make_response(jsonify(data),200)
+
 @personas.route('/personas/insert', methods=['POST'])
 def insert_persona():
     data = request.get_json()
@@ -68,7 +88,7 @@ def insert_persona():
 def update_persona(documento):    
     persona = Persona.query.get(documento)
     
-    if persona==None:
+    if not persona:
         data = {
             'message': 'Persona no encontrada',
             'status': 400
