@@ -1,6 +1,6 @@
-from utils.ma import ma
 from models.resultado_cita import ResultadoCita
 from schemas.cita_schema import CitaSchema
+from utils.ma import ma
 
 class ResultadoCitaSchema(ma.Schema):
     class Meta:
