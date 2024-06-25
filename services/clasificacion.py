@@ -47,18 +47,17 @@ def insert():
     data = {
         'message': 'Rango de calificación creado con éxito',
         'status': 201,
-        'data': clasificacion_schema.dump(clasificacion)
+        'clasificacion': clasificacion_schema.dump(clasificacion)
     }
     
     return make_response(jsonify(data), 201)
 
-# LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
 @clasificaciones.route('/clasificaciones/update/<int:id_clasificacion>', methods=['PUT'])
 @jwt_required()
 def update(id_clasificacion):
     clasificacion = Clasificacion.query.get(id_clasificacion)
     
-    if clasificacion == None:
+    if not clasificacion:
         data = {
             'message': 'Rango de calificación no encontrado',
             'status': 404
@@ -77,7 +76,7 @@ def update(id_clasificacion):
     data = {
         'message': 'Rango de calificación actualizado con éxito',
         'status': 200,
-        'data': clasificacion_schema.dump(clasificacion)
+        'clasificacion': clasificacion_schema.dump(clasificacion)
     }
     
     return make_response(jsonify(data), 200)
@@ -87,20 +86,20 @@ def update(id_clasificacion):
 def delete(id_clasificacion):
     clasificacion = Clasificacion.query.get(id_clasificacion)
     
-    if clasificacion == None:
+    if not clasificacion:
         data = {
-            'message': 'Rango de calificación no encontrado',
+            'message': 'Clasificación no encontrada',
             'status': 404
         }
         
         return make_response(jsonify(data), 404)
-    
+
     db.session.delete(clasificacion)
-    
+    db.session.commit()
+
     data = {
-        'message': 'Rango de calificación eliminado con éxito',
-        'status': 200,
-        'data': clasificacion_schema.dump(clasificacion)
+        'message': 'Clasificacion eliminada con éxito',
+        'status': 200
     }
     
     return make_response(jsonify(data), 200)
