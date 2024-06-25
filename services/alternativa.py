@@ -45,18 +45,17 @@ def insert():
     data = {
         'message': 'Alternativa creada con éxito',
         'status': 201,
-        'data': alternativa_schema.dump(alternativa)
+        'alternativa': alternativa_schema.dump(alternativa)
     }
     
     return make_response(jsonify(data), 201)
 
-# LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
 @alternativas.route('/alternativas/update/<int:id_alternativa>', methods=['PUT'])
 @jwt_required()
 def update(id_alternativa):
     alternativa = Alternativa.query.get(id_alternativa)
     
-    if alternativa == None:
+    if not alternativa:
         data = {
             'message': 'Alternativa no encontrada',
             'status': 404
@@ -73,7 +72,7 @@ def update(id_alternativa):
     data = {
         'message': 'Alternativa actualizada con éxito',
         'status': 200,
-        'data': alternativa_schema.dump(alternativa)
+        'alternativa': alternativa_schema.dump(alternativa)
     }
     
     return make_response(jsonify(data), 200)
@@ -83,21 +82,20 @@ def update(id_alternativa):
 def delete(id):
     alternativa = Alternativa.query.get(id)
     
-    if alternativa:
-        db.session.delete(alternativa)
-        db.session.commit()
-        
+    if not alternativa:
         data = {
-            'message': 'Alternativa eliminada con éxito',
-            'status': 200
+            'message': 'Alternativa no encontrada',
+            'status': 404
         }
         
-        return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 404)
     
+    db.session.delete(alternativa)
+    db.session.commit()
+        
     data = {
-        'message': 'Alternativa no encontrada',
-        'status': 404,
-        'alternativa': alternativa_schema.dump(alternativa)
+        'message': 'Alternativa eliminada con éxito',
+        'status': 200
     }
     
-    return make_response(jsonify(data), 404)
+    return make_response(jsonify(data), 200)
