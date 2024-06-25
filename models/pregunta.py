@@ -1,6 +1,6 @@
-from utils.db import db
-from dataclasses import dataclass
 from models.tipo_test import TipoTest
+from dataclasses import dataclass
+from utils.db import db
 
 @dataclass
 class Pregunta(db.Model):
