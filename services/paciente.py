@@ -21,9 +21,28 @@ def get_pacientes():
     
     return make_response(jsonify(data),200)    
 
+@pacientes.route('/pacientes/get/<int:id_usuario>', methods=['GET'])
+def get_paciente(id_usuario):
+    paciente = Paciente.query.filter_by(id_usuario=id_usuario).first()
+    
+    if paciente==None:
+        data = {
+            'message': 'Estudiante no encontrado',
+            'status': 404
+        }
+        
+        return make_response(jsonify(data),404)
+    
+    data = {
+        'message': 'Estudiante encontrado con éxito',
+        'status': 200,
+        'paciente': paciente_schema.dump(paciente)
+    }
+    
+    return make_response(jsonify(data),200)
+
 @pacientes.route('/pacientes/insert', methods=['POST'])
-# NO SE REQUIERE JWT PARA CREAR PACIENTE
-def insert():
+def insert(): #NO SE REQUIERE JWT PARA CREAR PACIENTE
     data = request.get_json()
     
     id_usuario = data.get('id_usuario')
@@ -35,18 +54,17 @@ def insert():
     data = {
         'message': 'Estudiante creado con éxito',
         'status': 201,
-        'estudiante': paciente_schema.dump(paciente)
+        'paciente': paciente_schema.dump(paciente)
     }
     
     return make_response(jsonify(data),201)
 
-#LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
 @pacientes.route('/pacientes/update/<int:id_paciente>', methods=['PUT'])
 @jwt_required()
 def update(id_paciente):
     paciente = Paciente.query.get(id_paciente)
     
-    if paciente==None:
+    if not paciente:
         data = {
             'message': 'Estudiante no encontrado',
             'status': 400
@@ -61,7 +79,7 @@ def update(id_paciente):
     data = {
         'message': 'Estudiante actualizado con éxito',
         'status': 200,
-        'estudiante': paciente_schema.dump(paciente)
+        'paciente': paciente_schema.dump(paciente)
     }
     
     return make_response(jsonify(data),200)
@@ -84,7 +102,6 @@ def delete(id_paciente):
     data = {
         'message': 'Estudiante eliminado con éxito',
         'status': 200,
-        'estudiante': paciente_schema.dump(paciente)
     }
     
     return make_response(jsonify(data), 200)
