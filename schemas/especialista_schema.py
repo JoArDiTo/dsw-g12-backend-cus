@@ -1,6 +1,6 @@
-from utils.ma import ma
 from models.especialista import Especialista
 from schemas.usuario_schema import UsuarioSchema
+from utils.ma import ma
 
 class EspecialistaSchema(ma.Schema):
     class Meta:

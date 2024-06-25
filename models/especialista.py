@@ -1,15 +1,15 @@
+from models.usuario import Usuario
 from utils.db import db
 from dataclasses import dataclass
-from models.usuario import Usuario
 
 @dataclass
 class Especialista(db.Model):
     __tablename__ = 'especialista'
     
-    id_especialista = db.Column(db.Integer, primary_key=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'))
-    licencia = db.Column(db.String(255))
+    id_especialista = db.Column(db.Integer, primary_key=True)
     especialidad = db.Column(db.String(60))
+    licencia = db.Column(db.String(255))
     
     cita = db.relationship('Cita', backref='especialista', cascade='all, delete-orphan')
         
