@@ -1,6 +1,6 @@
+from schemas.ubigeo_schema import UbigeoSchema
 from utils.ma import ma
 from models.persona import Persona
-from schemas.ubigeo_schema import UbigeoSchema
 
 class PersonaSchema(ma.Schema):
     class Meta:
@@ -8,13 +8,13 @@ class PersonaSchema(ma.Schema):
         fields = (
             'documento',
             'id_ubigeo',
-            'nombres',
-            'apellidos',
             'fecha_nacimiento',
+            'nombre',
+            'apellido_paterno',
             'sexo',
+            'apellido_materno',
+            'tipo_documento',
             'telefono',
-            'correo',
-            'direccion',
             'ubigeo'
         )
         
