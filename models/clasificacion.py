@@ -20,3 +20,4 @@ class Clasificacion(db.Model):
         self.maximo = maximo
         self.interpretacion = interpretacion
         self.id_semaforo = id_semaforo
+
