@@ -1,6 +1,7 @@
-from utils.db import db
 from dataclasses import dataclass
 from models.cita import Cita
+from utils.db import db
+
 
 @dataclass
 class ResultadoCita(db.Model):
