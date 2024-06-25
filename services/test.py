@@ -31,8 +31,9 @@ def insert():
     resultado = data.get('resultado')
     interpretacion = data.get('interpretacion')
     color = data.get('color')
+    fecha = data.get('fecha')
     
-    if id_tipo_test==None or id_paciente==None or resultado==None or interpretacion==None or color==None:
+    if id_tipo_test==None or id_paciente==None or resultado==None or interpretacion==None or color==None or fecha==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -40,25 +41,24 @@ def insert():
         
         return make_response(jsonify(data), 400)
 
-    test = Test(id_tipo_test, id_paciente, resultado, interpretacion, color)    
+    test = Test(id_tipo_test, id_paciente, resultado, interpretacion, color, fecha) 
     db.session.add(test)
     db.session.commit()
     
     data = {
         'message': 'Test creado con éxito',
         'status': 201,
-        'data': test_schema.dump(test)
+        'test': test_schema.dump(test)
     }
     
     return make_response(jsonify(data), 201) 
 
-# LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
 @tests.route('/tests/update/<int:id_test>', methods=['PUT'])
 @jwt_required()
 def update(id_test):
     test = Test.query.get(id_test)
     
-    if test == None:
+    if not test:
         data = {
             'message': 'Test no encontrado',
             'status': 404
@@ -71,13 +71,17 @@ def update(id_test):
     test.resultado = request.get_json().get('resultado')
     test.interpretacion = request.get_json().get('interpretacion')
     test.color = request.get_json().get('color')
+    test.fecha = request.get_json().get('fecha')
+    test.ansiedad_consignada = request.get_json().get('ansiedad_consignada')
+    test.observaciones = request.get_json().get('observaciones')
+    test.consignado = request.get_json().get('consignado')
     
     db.session.commit()
     
     data = {
         'message': 'Test actualizado con éxito',
         'status': 200,
-        'data': test_schema.dump(test)
+        'test': test_schema.dump(test)
     }
     
     return make_response(jsonify(data), 200)
@@ -87,21 +91,20 @@ def update(id_test):
 def delete(id_test):
     test = Test.query.get(id_test)
     
-    if test == None:
+    if not test:
         data = {
             'message': 'Test no encontrado',
             'status': 404
         }
         
         return make_response(jsonify(data), 404)
-    
+
     db.session.delete(test)
     db.session.commit()
     
     data = {
         'message': 'Test eliminado con éxito',
-        'status': 200,
-        'data': test_schema.dump(test)
+        'status': 200
     }
     
     return make_response(jsonify(data), 200)

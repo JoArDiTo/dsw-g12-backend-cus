@@ -8,7 +8,6 @@ from flask_jwt_extended import jwt_required
 ubigeos = Blueprint('ubigeos', __name__)
 
 @ubigeos.route('/ubigeos/get', methods=['GET'])
-@jwt_required()
 def get_ubigeos():
     result = {}
     ubigeos = Ubigeo.query.all()
@@ -23,7 +22,7 @@ def get_ubigeos():
     return make_response(jsonify(data),200)
 
 @ubigeos.route('/ubigeos/insert', methods=['POST'])
-# @jwt_required()
+@jwt_required()
 def insert():
     data = request.get_json()
     
@@ -31,11 +30,10 @@ def insert():
     departamento = data.get('departamento')
     provincia = data.get('provincia')
     distrito = data.get('distrito')
-    superficie = data.get('superficie')
-    altitud = data.get('altitud')
     latitud = data.get('latitud')
+    longitud = data.get('longitud')
     
-    if id_ubigeo==None or departamento==None or provincia==None or distrito==None or superficie==None or altitud==None or latitud==None:
+    if id_ubigeo==None or departamento==None or provincia==None or distrito==None or latitud==None or longitud==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -43,7 +41,7 @@ def insert():
         
         return make_response(jsonify(data),400)
     
-    ubigeo = Ubigeo(id_ubigeo, departamento, provincia, distrito, superficie, altitud, latitud)
+    ubigeo = Ubigeo(id_ubigeo, departamento, provincia, distrito, latitud, longitud)
     
     db.session.add(ubigeo)
     db.session.commit()
@@ -61,7 +59,7 @@ def insert():
 def update(id_ubigeo):    
     ubigeo = Ubigeo.query.get(id_ubigeo)
     
-    if ubigeo==None:
+    if not ubigeo:
         data = {
             'message': 'Ubigeo no encontrado',
             'status': 400
@@ -72,9 +70,8 @@ def update(id_ubigeo):
     ubigeo.departamento = request.json.get('departamento')
     ubigeo.provincia = request.json.get('provincia')
     ubigeo.distrito = request.json.get('distrito')
-    ubigeo.superficie = request.json.get('superficie')
-    ubigeo.altitud = request.json.get('altitud')
     ubigeo.latitud = request.json.get('latitud')
+    ubigeo.longitud = request.json.get('longitud')
     
     db.session.commit()
     
@@ -104,8 +101,7 @@ def delete(id_ubigeo):
     
     data = {
         'message': 'Ubigeo eliminado con éxito',
-        'status': 200,
-        'ubigeo': ubigeo_schema.dump(ubigeo)
+        'status': 200
     }
     
     return make_response(jsonify(data),200)

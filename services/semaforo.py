@@ -42,7 +42,7 @@ def insert_semaforo():
     data = {
         'message': 'Semaforo creado con éxito',
         'status': 201,
-        'data': semaforo_schema.dump(semaforo)
+        'semaforo': semaforo_schema.dump(semaforo)
     }
     
     return make_response(jsonify(data),201)
@@ -52,7 +52,7 @@ def insert_semaforo():
 def update_semaforo(id_semaforo):
     semaforo = Semaforo.query.get(id_semaforo)
     
-    if semaforo == None:
+    if not semaforo:
         data = {
             'message': 'No se encontró el semaforo',
             'status': 404
@@ -69,7 +69,7 @@ def update_semaforo(id_semaforo):
     data = {
         'message': 'Semaforo actualizado con éxito',
         'status': 200,
-        'data': semaforo_schema.dump(semaforo)
+        'semaforo': semaforo_schema.dump(semaforo)
     }
     
     return make_response(jsonify(data),200)
@@ -79,7 +79,7 @@ def update_semaforo(id_semaforo):
 def delete_semaforo(id_semaforo):
     semaforo = Semaforo.query.get(id_semaforo)
     
-    if semaforo == None:
+    if not semaforo:
         data = {
             'message': 'No se encontró el semaforo',
             'status': 404

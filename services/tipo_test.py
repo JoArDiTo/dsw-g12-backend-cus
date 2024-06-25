@@ -16,7 +16,7 @@ def get_tipos_test():
     data = {
         'message': 'Lista generada con éxito',
         'status': 200,
-        'tipos': result
+        'tipos_test': result
     }
 
     return make_response(jsonify(data), 200)
@@ -50,13 +50,12 @@ def insert():
     
     return make_response(jsonify(data), 201)
 
-#LA FUNCIÓN UPDATE NO SERÁ IMPLEMENTADA EN EL FRONTEND
 @tipos_test.route('/tipos/update/<int:id_tipo_test>', methods=['PUT'])
 @jwt_required()
 def update(id_tipo_test):
     tipo_test = TipoTest.query.get(id_tipo_test)
     
-    if tipo_test==None:
+    if not tipo_test:
         data = {
             'message': 'Tipo de test no encontrado',
             'status': 400
@@ -83,7 +82,7 @@ def update(id_tipo_test):
 def delete(id_tipo_test):
     tipo_test = TipoTest.query.get(id_tipo_test)
     
-    if tipo_test==None:
+    if not tipo_test:
         data = {
             'message': 'Tipo de test no encontrado',
             'status': 400
@@ -96,8 +95,7 @@ def delete(id_tipo_test):
     
     data = {
         'message': 'Tipo de test eliminado con éxito',
-        'status': 200,
-        'tipo_test': tipo_test_schema.dump(tipo_test)
+        'status': 200
     }
     
     return make_response(jsonify(data), 200)
