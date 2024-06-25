@@ -1,6 +1,6 @@
-from utils.ma import ma
-from models.pregunta import Pregunta
 from schemas.tipo_test_schema import TipoTestSchema
+from models.pregunta import Pregunta
+from utils.ma import ma
 
 class PreguntaSchema(ma.Schema):
   class Meta:
