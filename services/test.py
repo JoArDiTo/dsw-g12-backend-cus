@@ -28,20 +28,12 @@ def insert():
     
     id_tipo_test = data.get('id_tipo_test')
     id_paciente = data.get('id_paciente')
+    id_clasificacion = data.get('id_clasificacion')
     resultado = data.get('resultado')
-    interpretacion = data.get('interpretacion')
-    color = data.get('color')
     fecha = data.get('fecha')
-    
-    if id_tipo_test==None or id_paciente==None or resultado==None or interpretacion==None or color==None or fecha==None:
-        data = {
-            'message': 'Faltan datos',
-            'status': 400
-        }
-        
-        return make_response(jsonify(data), 400)
+    id_vigilancia = data.get('id_vigilancia')
 
-    test = Test(id_tipo_test, id_paciente, resultado, interpretacion, color, fecha) 
+    test = Test(id_tipo_test, id_paciente, id_clasificacion, resultado, fecha, id_vigilancia)
     db.session.add(test)
     db.session.commit()
     
@@ -66,15 +58,12 @@ def update(id_test):
         
         return make_response(jsonify(data), 404)
     
-    test.id_tipo_test = request.get_json().get('id_tipo_test')
-    test.id_paciente = request.get_json().get('id_paciente')
-    test.resultado = request.get_json().get('resultado')
-    test.interpretacion = request.get_json().get('interpretacion')
-    test.color = request.get_json().get('color')
-    test.fecha = request.get_json().get('fecha')
-    test.ansiedad_consignada = request.get_json().get('ansiedad_consignada')
-    test.observaciones = request.get_json().get('observaciones')
-    test.consignado = request.get_json().get('consignado')
+    test.id_tipo_test = request.json['id_tipo_test']
+    test.id_paciente = request.json['id_paciente']
+    test.id_clasificacion = request.json['id_clasificacion']
+    test.resultado = request.json['resultado']
+    test.fecha = request.json['fecha']
+    test.id_vigilancia = request.json['id_vigilancia']
     
     db.session.commit()
     

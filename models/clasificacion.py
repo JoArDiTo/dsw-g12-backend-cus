@@ -14,6 +14,8 @@ class Clasificacion(db.Model):
     interpretacion = db.Column(db.String(255))
     id_semaforo = db.Column(db.Integer, db.ForeignKey('semaforo.id_semaforo'))
     
+    test = db.relationship('Test', backref='clasificacion', cascade='all, delete-orphan')
+    
     def __init__(self,id_tipo_test,minimo,maximo,interpretacion, id_semaforo):
         self.id_tipo_test = id_tipo_test
         self.minimo = minimo
