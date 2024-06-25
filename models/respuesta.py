@@ -1,8 +1,8 @@
-from utils.db import db
+from models.alternativa import Alternativa
+from models.pregunta import Pregunta
 from dataclasses import dataclass
 from models.test import Test
-from models.pregunta import Pregunta
-from models.alternativa import Alternativa
+from utils.db import db
 
 @dataclass
 class Respuesta(db.Model):
