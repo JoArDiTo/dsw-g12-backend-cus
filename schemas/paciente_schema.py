@@ -1,7 +1,7 @@
-from utils.ma import ma
+from schemas.usuario_schema import UsuarioSchema
 from marshmallow import fields
 from models.paciente import Paciente
-from schemas.usuario_schema import UsuarioSchema
+from utils.ma import ma
 
 class PacienteSchema(ma.Schema):
     class Meta:
