@@ -1,8 +1,8 @@
+from schemas.resultado_cita_schema import resultado_cita_schema, resultados_cita_schema
 from flask import Blueprint, request, jsonify, make_response
 from models.resultado_cita import ResultadoCita
-from utils.db import db
-from schemas.resultado_cita_schema import resultado_cita_schema, resultados_cita_schema
 from flask_jwt_extended import jwt_required
+from utils.db import db
 
 resultados = Blueprint('resultados', __name__)
 
@@ -45,7 +45,7 @@ def insert():
     data = {
         'message': 'Resultado creado con éxito',
         'status': 201,
-        'data': resultado_cita_schema.dump(resultado)
+        'resultado': resultado_cita_schema.dump(resultado)
     }
     
     return make_response(jsonify(data), 201)
@@ -55,7 +55,7 @@ def insert():
 def update(id_resultado):
     resultado = ResultadoCita.query.get(id_resultado)
     
-    if resultado == None:
+    if not resultado:
         data = {
             'message': 'Resultado no encontrado',
             'status': 400
@@ -72,7 +72,7 @@ def update(id_resultado):
     data = {
         'message': 'Resultado actualizado con éxito',
         'status': 200,
-        'data': resultado_cita_schema.dump(resultado)
+        'resultado': resultado_cita_schema.dump(resultado)
     }
     
     return make_response(jsonify(data), 200)
@@ -89,14 +89,13 @@ def delete(id_resultado):
         }
         
         return make_response(jsonify(data), 404)
-    
+
     db.session.delete(resultado)
     db.session.commit()
     
     data = {
         'message': 'Resultado eliminado con éxito',
-        'status': 200,
-        'data': resultado_cita_schema.dump(resultado)
+        'status': 200
     }
     
     return make_response(jsonify(data), 200)
