@@ -21,13 +21,13 @@ class Test(db.Model):
     
     respuesta = db.relationship('Respuesta', backref='test', cascade='all, delete-orphan')
     
-    def __init__(self,id_tipo_test,id_paciente,resultado,interpretacion, color):
+    def __init__(self,id_tipo_test,id_paciente,resultado,interpretacion, color, fecha):
         self.id_tipo_test = id_tipo_test
         self.id_paciente = id_paciente
         self.resultado = resultado
         self.interpretacion = interpretacion
         self.color = color
-        self.fecha = datetime.datetime.now().strftime("%Y-%m-%d")
+        self.fecha = fecha
         self.ansiedad_consignada = "Por consignar"
         self.observaciones = "Por detallar"
         self.consignado = False
