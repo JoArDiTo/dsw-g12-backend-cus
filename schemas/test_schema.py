@@ -16,7 +16,7 @@ class TestSchema(ma.Schema):
           'color',
           'ansiedad_consignada',
           'observaciones',
-          'consignado'
+          'consignado',
           'tipo_test',
           'paciente'
         )
