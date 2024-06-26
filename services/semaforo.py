@@ -75,7 +75,7 @@ def update_semaforo(id_semaforo):
     return make_response(jsonify(data),200)
 
 @semaforos.route('/semaforos/delete/<int:id_semaforo>', methods=['DELETE'])
-@jwt_required()
+#@jwt_required()
 def delete_semaforo(id_semaforo):
     semaforo = Semaforo.query.get(id_semaforo)
     
