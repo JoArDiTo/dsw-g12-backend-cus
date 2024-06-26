@@ -36,7 +36,7 @@ def insert():
         }
         
         return make_response(jsonify(data), 400)
-      
+    
     ansiedad = Ansiedad(id_especialista, contenido)
     db.session.add(ansiedad)
     db.session.commit()
@@ -48,7 +48,7 @@ def insert():
     }
     
     return make_response(jsonify(data), 201)
-  
+
 @ansiedades.route('/ansiedades/update/<int:id_ansiedad>', methods=['PUT'])
 @jwt_required()
 def update(id_ansiedad):

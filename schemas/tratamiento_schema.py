@@ -5,5 +5,5 @@ class TratamientoSchema(ma.Schema):
     id_tratamiento = fields.Integer()
     recomendacion = fields.String()
     
-semaforo_schema = TratamientoSchema()
-semaforos_schema = TratamientoSchema(many=True)
+tratamiento_schema = TratamientoSchema()
+tratamientos_schema = TratamientoSchema(many=True)

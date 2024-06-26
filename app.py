@@ -10,6 +10,9 @@ from services.especialista import especialistas
 from services.cita import citas
 from services.resultado_cita import resultados
 from services.tipo_test import tipos_test
+from services.ansiedad import ansiedades
+from services.tratamiento import tratamientos
+from services.vigilancia import vigilancias
 from services.test import tests
 from services.respuesta import respuestas
 from services.pregunta import preguntas
@@ -41,12 +44,15 @@ app.register_blueprint(especialistas)
 app.register_blueprint(citas)
 app.register_blueprint(resultados)
 app.register_blueprint(tipos_test)
-app.register_blueprint(tests)
-app.register_blueprint(respuestas)
 app.register_blueprint(preguntas)
 app.register_blueprint(alternativas)
 app.register_blueprint(semaforos)
 app.register_blueprint(clasificaciones)
+app.register_blueprint(ansiedades)
+app.register_blueprint(tratamientos)
+app.register_blueprint(vigilancias)
+app.register_blueprint(tests)
+app.register_blueprint(respuestas)
 
 with app.app_context():
     db.create_all()
