@@ -8,7 +8,7 @@ class AnsiedadSchema(ma.Schema):
         fields = (
             'id_ansiedad',
             'id_especialista',
-            'contenido'
+            'contenido',
             'especialista'
         )
         
