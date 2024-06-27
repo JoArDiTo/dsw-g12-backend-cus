@@ -21,6 +21,21 @@ def get_tests():
 
     return make_response(jsonify(data), 200)
 
+@tests.route('/tests/get/<int:id_paciente>', methods=['GET'])
+@jwt_required()
+def get_tests_paciente(id_paciente):
+    result = {}
+    tests = Test.query.filter_by(id_paciente=id_paciente).all()
+    result = tests_schema.dump(tests)
+    
+    data = {
+        'message': 'Lista generada con éxito',
+        'status': 200,
+        'tests': result
+    }
+
+    return make_response(jsonify(data), 200)
+
 @tests.route('/tests/insert', methods=['POST'])
 @jwt_required()
 def insert():
