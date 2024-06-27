@@ -21,6 +21,21 @@ def get_respuestas():
 
     return make_response(jsonify(data), 200)
 
+@respuestas.route('/respuestas/get/<int:id_test>', methods=['GET'])
+@jwt_required()
+def get_respuestas_test(id_test):
+    result = {}
+    respuestas = Respuesta.query.filter_by(id_test=id_test).all()
+    result = respuestas_schema.dump(respuestas)
+    
+    data = {
+        'message': 'Lista generada con éxito',
+        'status': 200,
+        'respuestas': result
+    }
+
+    return make_response(jsonify(data), 200)
+
 @respuestas.route('/respuestas/insert', methods=['POST'])
 @jwt_required()
 def insert():
