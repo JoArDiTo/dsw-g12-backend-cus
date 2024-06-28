@@ -5,6 +5,8 @@ from schemas.usuario_schema import usuario_schema, usuarios_schema
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required
 
+from models.especialista import Especialista
+
 usuarios = Blueprint('usuarios', __name__)
 
 @usuarios.route('/usuarios/login', methods=['POST'])
@@ -29,11 +31,11 @@ def login():
         }
         return make_response(jsonify(data), 400)
     
-    
+    isEspecialista = True if Especialista.query.filter_by(id_usuario=usuario.id_usuario).first() else False 
     
     data = {
         'message': 'Inicio de sesión exitoso',
-        'access_token': create_access_token(identity=usuario.documento, additional_claims={"id_usuario": usuario.id_usuario}),
+        'access_token': create_access_token(identity=usuario.documento, additional_claims={"id_usuario": usuario.id_usuario, "isEspecialista": isEspecialista}),
         'refresh_token': create_refresh_token(identity=usuario.documento),
     }
     
