@@ -6,9 +6,12 @@ class Tratamiento(db.Model):
   __tablename__ = 'tratamiento'
   
   id_tratamiento = db.Column(db.Integer, primary_key=True)
-  recomendacion = db.Column(db.String(255))
+  descripcion = db.Column(db.String(80))
+  fundamentacion = db.Column(db.String(255))
   
   vigilancia = db.relationship('Vigilancia', backref='tratamiento', cascade='all, delete-orphan')
   
-  def __init__(self,recomendacion):
+  def __init__(self,recomendacion, descripcion, fundamentacion):
     self.recomendacion = recomendacion
+    self.descripcion = descripcion
+    self.fundamentacion = fundamentacion

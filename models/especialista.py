@@ -12,7 +12,6 @@ class Especialista(db.Model):
     licencia = db.Column(db.String(255))
     
     cita = db.relationship('Cita', backref='especialista', cascade='all, delete-orphan')
-    ansiedad = db.relationship('Ansiedad', backref='especialista', cascade='all, delete-orphan')
         
     def __init__(self,id_usuario,licencia,especialidad):
         self.id_usuario = id_usuario

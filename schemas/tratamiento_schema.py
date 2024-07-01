@@ -3,7 +3,8 @@ from marshmallow import fields
 
 class TratamientoSchema(ma.Schema):
     id_tratamiento = fields.Integer()
-    recomendacion = fields.String()
+    descripcion = fields.String()
+    fundamentacion = fields.String()
     
 tratamiento_schema = TratamientoSchema()
 tratamientos_schema = TratamientoSchema(many=True)

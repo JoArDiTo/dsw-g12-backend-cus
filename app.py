@@ -10,7 +10,7 @@ from services.especialista import especialistas
 from services.cita import citas
 from services.resultado_cita import resultados
 from services.tipo_test import tipos_test
-from services.ansiedad import ansiedades
+from services.diagnostico import diagnosticos
 from services.tratamiento import tratamientos
 from services.vigilancia import vigilancias
 from services.test import tests
@@ -48,7 +48,7 @@ app.register_blueprint(preguntas)
 app.register_blueprint(alternativas)
 app.register_blueprint(semaforos)
 app.register_blueprint(clasificaciones)
-app.register_blueprint(ansiedades)
+app.register_blueprint(diagnosticos)
 app.register_blueprint(tratamientos)
 app.register_blueprint(vigilancias)
 app.register_blueprint(tests)

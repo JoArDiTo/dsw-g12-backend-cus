@@ -26,10 +26,12 @@ def get_vigilancias():
 def insert():
     data = request.get_json()
     
-    id_ansiedad = data.get('id_ansiedad')
+    id_diagnostico = data.get('id_diagnostico')
     id_tratamiento = data.get('id_tratamiento')
+    observacion = data.get('observacion')
+    fundamentacion = data.get('fundamentacion')
     
-    if id_ansiedad==None or id_tratamiento==None:
+    if id_diagnostico==None or id_tratamiento==None or observacion==None or fundamentacion==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -37,7 +39,7 @@ def insert():
         
         return make_response(jsonify(data), 400)
       
-    vigilancia = Vigilancia(id_ansiedad, id_tratamiento)
+    vigilancia = Vigilancia(id_diagnostico, id_tratamiento, observacion, fundamentacion)
     db.session.add(vigilancia)
     db.session.commit()
     
@@ -64,6 +66,8 @@ def update(id_vigilancia):
     
     vigilancia.id_ansiedad = request.json['id_ansiedad']
     vigilancia.id_tratamiento = request.json['id_tratamiento']
+    vigilancia.observacion = request.json['observacion']
+    vigilancia.fundamentacion = request.json['fundamentacion']
     
     db.session.commit()
     

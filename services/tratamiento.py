@@ -26,9 +26,10 @@ def get_tratamientos():
 def insert():
     data = request.get_json()
     
-    recomendacion = data.get('recomendacion')
+    descripcion = data.get('descripcion')
+    fundamentacion = data.get('fundamentacion')
     
-    if recomendacion==None:
+    if descripcion==None or fundamentacion==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -36,7 +37,7 @@ def insert():
         
         return make_response(jsonify(data), 400)
     
-    tratamiento = Tratamiento(recomendacion)
+    tratamiento = Tratamiento(descripcion, fundamentacion)
     db.session.add(tratamiento)
     db.session.commit()
     
@@ -61,7 +62,8 @@ def update(id_tratamiento):
         
         return make_response(jsonify(data), 404)
     
-    tratamiento.recomendacion = request.json['recomendacion']
+    tratamiento.descripcion = request.json['descripcion']
+    tratamiento.fundamentacion = request.json['fundamentacion']
     
     db.session.commit()
     

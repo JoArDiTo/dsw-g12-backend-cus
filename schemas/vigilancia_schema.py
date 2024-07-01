@@ -1,6 +1,6 @@
 from utils.ma import ma
 from models.vigilancia import Vigilancia
-from schemas.ansiedad_schema import AnsiedadSchema
+from schemas.diagnostico_schema import DiagnosticoSchema
 from schemas.tratamiento_schema import TratamientoSchema
 
 class VigilanciaSchema(ma.Schema):
@@ -8,13 +8,15 @@ class VigilanciaSchema(ma.Schema):
         model = Vigilancia
         fields = (
             'id_vigilancia',
-            'id_ansiedad',
+            'id_diagnostico',
             'id_tratamiento',
-            'ansiedad',
+            'observacion',
+            'fundamentacion',
+            'diagnostico',
             'tratamiento'
         )
         
-    ansiedad = ma.Nested(AnsiedadSchema)
+    ansiedad = ma.Nested(DiagnosticoSchema)
     tratamiento = ma.Nested(TratamientoSchema)
     
 vigilancia_schema = VigilanciaSchema()
