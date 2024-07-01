@@ -3,7 +3,8 @@ from models.usuario import Usuario
 from utils.db import db
 from schemas.usuario_schema import usuario_schema, usuarios_schema
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt
+import time
 
 from models.especialista import Especialista
 
@@ -40,6 +41,24 @@ def login():
     }
     
     return make_response(jsonify(data), 200)
+
+@usuarios.route('/usuarios/isTokenExpired', methods=['GET'])
+@jwt_required()
+def is_token_expired():
+    try:
+        # Obtener los claims del token actual
+        claims = get_jwt()
+        # Obtener el tiempo de expiración del token
+        exp_timestamp = claims['exp']
+        # Obtener el tiempo actual en formato timestamp UNIX
+        current_timestamp = time.time()
+        # Verificar si el token ha expirado
+        if current_timestamp > exp_timestamp:
+            return make_response(jsonify({'message': 'Token ha expirado', 'expired': True}), 200)
+        else:
+            return make_response(jsonify({'message': 'Token válido', 'expired': False}), 200)
+    except Exception as e:
+        return make_response(jsonify({'message': 'Error al verificar el token', 'error': str(e)}), 500)
 
 @usuarios.route('/usuarios/validator', methods=['GET'])
 def validator_email():
