@@ -20,7 +20,28 @@ def get_tratamientos():
     }
 
     return make_response(jsonify(data), 200)
-  
+
+@tratamientos.route('/tratamientos/get/<int:id_tratamiento>', methods=['GET'])
+@jwt_required()
+def get_tratamiento(id_tratamiento):
+    tratamiento = Tratamiento.query.get(id_tratamiento)
+    
+    if not tratamiento:
+        data = {
+            'message': 'No se encontró el tratamiento',
+            'status': 404
+        }
+        
+        return make_response(jsonify(data), 404)
+    
+    data = {
+        'message': 'Tratamiento encontrado con éxito',
+        'status': 200,
+        'tratamiento': tratamiento_schema.dump(tratamiento)
+    }
+    
+    return make_response(jsonify(data), 200)
+
 @tratamientos.route('/tratamientos/insert', methods=['POST'])
 @jwt_required()
 def insert():

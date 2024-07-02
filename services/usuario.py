@@ -7,6 +7,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, jwt_re
 import time
 
 from models.especialista import Especialista
+from models.paciente import Paciente
 
 usuarios = Blueprint('usuarios', __name__)
 
@@ -32,11 +33,16 @@ def login():
         }
         return make_response(jsonify(data), 400)
     
-    isEspecialista = True if Especialista.query.filter_by(id_usuario=usuario.id_usuario).first() else False 
+    isEspecialista = True if Especialista.query.filter_by(id_usuario=usuario.id_usuario).first() else False
+    id_paciente = Paciente.query.filter_by(id_usuario=usuario.id_usuario).first().id_paciente
+    
+    additional_claims = {"id_usuario": usuario.id_usuario, 
+                        "id_paciente": id_paciente,
+                        "isEspecialista": isEspecialista}
     
     data = {
         'message': 'Inicio de sesión exitoso',
-        'access_token': create_access_token(identity=usuario.documento, additional_claims={"id_usuario": usuario.id_usuario, "isEspecialista": isEspecialista}),
+        'access_token': create_access_token(identity=usuario.documento, additional_claims=additional_claims),
         'refresh_token': create_refresh_token(identity=usuario.documento),
     }
     

@@ -11,7 +11,6 @@ class Tratamiento(db.Model):
   
   vigilancia = db.relationship('Vigilancia', backref='tratamiento', cascade='all, delete-orphan')
   
-  def __init__(self,recomendacion, descripcion, fundamentacion):
-    self.recomendacion = recomendacion
+  def __init__(self, descripcion, fundamentacion):
     self.descripcion = descripcion
     self.fundamentacion = fundamentacion

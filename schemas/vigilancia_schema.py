@@ -16,7 +16,7 @@ class VigilanciaSchema(ma.Schema):
             'tratamiento'
         )
         
-    ansiedad = ma.Nested(DiagnosticoSchema)
+    diagnostico = ma.Nested(DiagnosticoSchema)
     tratamiento = ma.Nested(TratamientoSchema)
     
 vigilancia_schema = VigilanciaSchema()

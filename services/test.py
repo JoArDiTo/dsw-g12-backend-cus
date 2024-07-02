@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from models.test import Test
+from models.clasificacion import Clasificacion
 from utils.db import db
 from schemas.test_schema import test_schema, tests_schema
 from flask_jwt_extended import jwt_required
@@ -40,14 +41,18 @@ def get_tests_paciente(id_paciente):
 @jwt_required()
 def insert():
     data = request.get_json()
-    
     id_tipo_test = data.get('id_tipo_test')
     id_paciente = data.get('id_paciente')
-    id_clasificacion = data.get('id_clasificacion')
-    resultado = data.get('resultado')
+    puntajes = data.get('puntajes')
     fecha = data.get('fecha')
     id_vigilancia = data.get('id_vigilancia')
 
+    resultado = 0
+    for puntaje in puntajes:
+        resultado += puntaje
+    
+    id_clasificacion = Clasificacion.query.filter(Clasificacion.id_tipo_test == id_tipo_test, Clasificacion.minimo <= resultado, Clasificacion.maximo >= resultado).first().id_clasificacion
+    
     test = Test(id_tipo_test, id_paciente, id_clasificacion, resultado, fecha, id_vigilancia)
     db.session.add(test)
     db.session.commit()
@@ -58,7 +63,7 @@ def insert():
         'test': test_schema.dump(test)
     }
     
-    return make_response(jsonify(data), 201) 
+    return make_response(jsonify(data), 201)
 
 @tests.route('/tests/update/<int:id_test>', methods=['PUT'])
 @jwt_required()

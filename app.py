@@ -54,6 +54,10 @@ app.register_blueprint(vigilancias)
 app.register_blueprint(tests)
 app.register_blueprint(respuestas)
 
+
+from services.tdo import tdo
+app.register_blueprint(tdo)
+
 with app.app_context():
     db.create_all()
 

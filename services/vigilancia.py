@@ -64,7 +64,7 @@ def update(id_vigilancia):
         
         return make_response(jsonify(data), 404)
     
-    vigilancia.id_ansiedad = request.json['id_ansiedad']
+    vigilancia.id_diagnostico = request.json['id_diagnostico']
     vigilancia.id_tratamiento = request.json['id_tratamiento']
     vigilancia.observacion = request.json['observacion']
     vigilancia.fundamentacion = request.json['fundamentacion']

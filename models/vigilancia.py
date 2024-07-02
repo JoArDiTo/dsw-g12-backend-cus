@@ -15,8 +15,8 @@ class Vigilancia(db.Model):
     
     test = db.relationship('Test', backref='vigilancia', cascade='all, delete-orphan')
     
-    def __init__(self, id_diagnostico, id_tratamiento, observaciones, fundamentacion):
+    def __init__(self, id_diagnostico, id_tratamiento, observacion, fundamentacion):
         self.id_diagnostico = id_diagnostico
         self.id_tratamiento = id_tratamiento
-        self.observacion = observaciones
+        self.observacion = observacion
         self.fundamentacion = fundamentacion

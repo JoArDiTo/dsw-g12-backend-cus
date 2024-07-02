@@ -18,6 +18,24 @@ def get_diagnosticos():
 
     return make_response(jsonify(data), 200)
 
+@diagnosticos.route("/diagnosticos/get/<int:id_diagnostico>", methods=["GET"])
+@jwt_required()
+def get_diagnostico(id_diagnostico):
+    diagnostico = Diagnostico.query.get(id_diagnostico)
+
+    if not diagnostico:
+        data = {"message": "No se encontró el diagnostico", "status": 404}
+
+        return make_response(jsonify(data), 404)
+
+    data = {
+        "message": "Diagnostico encontrado con éxito",
+        "status": 200,
+        "diagnostico": diagnostico_schema.dump(diagnostico),
+    }
+
+    return make_response(jsonify(data), 200)
+
 
 @diagnosticos.route("/diagnosticos/insert", methods=["POST"])
 @jwt_required()
@@ -39,7 +57,7 @@ def insert():
     data = {
         "message": "Diagnostico creado con éxito",
         "status": 201,
-        "ansiedad": diagnostico_schema.dump(diagnostico),
+        "diagnostico": diagnostico_schema.dump(diagnostico),
     }
 
     return make_response(jsonify(data), 201)
@@ -55,14 +73,14 @@ def update(id_diagnostico):
 
         return make_response(jsonify(data), 404)
 
-    diagnostico.descripcion = request.json["descripcion"]
-    diagnostico.fundamentacion = request.json["fundamentacion"]
+    diagnostico.descripcion = request.get_json().get("descripcion")
+    diagnostico.fundamentacion = request.get_json().get("fundamentacion")
     db.session.commit()
 
     data = {
         "message": "Diagnostico actualizado con éxito",
         "status": 200,
-        "ansiedad": diagnostico_schema.dump(diagnostico),
+        "diagnostico": diagnostico_schema.dump(diagnostico),
     }
 
     return make_response(jsonify(data), 200)
