@@ -7,8 +7,6 @@ from services.persona import personas
 from services.usuario import usuarios
 from services.paciente import pacientes
 from services.especialista import especialistas
-from services.cita import citas
-from services.resultado_cita import resultados
 from services.tipo_test import tipos_test
 from services.diagnostico import diagnosticos
 from services.tratamiento import tratamientos
@@ -41,8 +39,6 @@ app.register_blueprint(personas)
 app.register_blueprint(usuarios)
 app.register_blueprint(pacientes)
 app.register_blueprint(especialistas)
-app.register_blueprint(citas)
-app.register_blueprint(resultados)
 app.register_blueprint(tipos_test)
 app.register_blueprint(preguntas)
 app.register_blueprint(alternativas)
