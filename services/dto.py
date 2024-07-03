@@ -6,9 +6,9 @@ from flask import Blueprint, request, jsonify, make_response
 from flask_jwt_extended import jwt_required
 from utils.db import db
 
-tdo = Blueprint('tdo', __name__)
+dto = Blueprint('dto', __name__)
 
-@tdo.route('/tdo/tests/get/<int:id_paciente>', methods=['GET'])
+@dto.route('/tests/dto/get/<int:id_paciente>', methods=['GET'])
 def get_test_by_paciente(id_paciente):
     tests = Test.query.options(
         selectinload(Test.tipo_test),
@@ -39,7 +39,7 @@ def get_test_by_paciente(id_paciente):
     }
     return make_response(jsonify(data), 200)
 
-@tdo.route('/tdo/preguntas/get/<int:id_tipo_test>', methods=['GET'])
+@dto.route('/preguntas/dto/get/<int:id_tipo_test>', methods=['GET'])
 def get_preguntas_y_alternativas(id_tipo_test):
     result = {}
     preguntas = Pregunta.query.filter_by(id_tipo_test=id_tipo_test).all()
@@ -59,7 +59,7 @@ def get_preguntas_y_alternativas(id_tipo_test):
 
     return make_response(jsonify(data), 200)
 
-@tdo.route('/tdo/respuestas/get/<int:id_test>', methods=['GET'])
+@dto.route('/respuestas/dto/get/<int:id_test>', methods=['GET'])
 def get_resumen(id_test):
     respuestas = Respuesta.query.filter_by(id_test=id_test).all()
     test = Test.query.filter_by(id_test=id_test).first()
@@ -91,7 +91,7 @@ from models.clasificacion import Clasificacion
 from models.semaforo import Semaforo
 from sqlalchemy.orm import selectinload
 
-@tdo.route('/tdo/vigilancias/get', methods=['GET'])
+@dto.route('/vigilancias/dto/get', methods=['GET'])
 def get_test_vigilancia():    
     tests = Test.query.options(
         selectinload(Test.tipo_test),
@@ -126,7 +126,7 @@ def get_test_vigilancia():
 
 from models.ubigeo import Ubigeo
 
-@tdo.route('/tdo/ubigeos/get', methods=['GET'])
+@dto.route('/ubigeos/dto/get', methods=['GET'])
 def get_test_mapa():
     tests = Test.query.options(
         selectinload(Test.tipo_test),

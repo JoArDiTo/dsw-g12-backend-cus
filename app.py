@@ -55,8 +55,8 @@ app.register_blueprint(tests)
 app.register_blueprint(respuestas)
 
 
-from services.tdo import tdo
-app.register_blueprint(tdo)
+from services.dto import dto
+app.register_blueprint(dto)
 
 with app.app_context():
     db.create_all()
