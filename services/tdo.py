@@ -8,7 +8,7 @@ from utils.db import db
 
 tdo = Blueprint('tdo', __name__)
 
-@tdo.route('/tdo/preguntas-y-alternativas/get/<int:id_tipo_test>', methods=['GET'])
+@tdo.route('/tdo/preguntas/get/<int:id_tipo_test>', methods=['GET'])
 def get_preguntas_y_alternativas(id_tipo_test):
     result = {}
     preguntas = Pregunta.query.filter_by(id_tipo_test=id_tipo_test).all()
@@ -28,7 +28,7 @@ def get_preguntas_y_alternativas(id_tipo_test):
 
     return make_response(jsonify(data), 200)
 
-@tdo.route('/tdo/test-resumen/get/<int:id_test>', methods=['GET'])
+@tdo.route('/tdo/respuestas/get/<int:id_test>', methods=['GET'])
 def get_resumen(id_test):
     respuestas = Respuesta.query.filter_by(id_test=id_test).all()
     test = Test.query.filter_by(id_test=id_test).first()
@@ -60,7 +60,7 @@ from models.clasificacion import Clasificacion
 from models.semaforo import Semaforo
 from sqlalchemy.orm import selectinload
 
-@tdo.route('/tdo/tests-vigilancia/get', methods=['GET'])
+@tdo.route('/tdo/vigilancias/get', methods=['GET'])
 def get_test_vigilancia():    
     tests = Test.query.options(
         selectinload(Test.tipo_test),
@@ -95,7 +95,7 @@ def get_test_vigilancia():
 
 from models.ubigeo import Ubigeo
 
-@tdo.route('/tdo/tests-mapa/get', methods=['GET'])
+@tdo.route('/tdo/ubigeos/get', methods=['GET'])
 def get_test_mapa():
     tests = Test.query.options(
         selectinload(Test.tipo_test),
