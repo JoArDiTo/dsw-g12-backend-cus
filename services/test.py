@@ -78,11 +78,11 @@ def update(id_test):
         
         return make_response(jsonify(data), 404)
     
-    test.id_tipo_test = request.json['id_tipo_test']
-    test.id_paciente = request.json['id_paciente']
-    test.id_clasificacion = request.json['id_clasificacion']
-    test.resultado = request.json['resultado']
-    test.fecha = request.json['fecha']
+    test.id_tipo_test = request.json.get('id_tipo_test', test.id_tipo_test)
+    test.id_paciente = request.json.get('id_paciente', test.id_paciente)
+    test.id_clasificacion = request.json.get('id_clasificacion', test.id_clasificacion)
+    test.resultado = request.json.get('resultado', test.resultado)
+    test.fecha = request.json.get('fecha', test.fecha)
     test.id_vigilancia = request.json['id_vigilancia']
     
     db.session.commit()

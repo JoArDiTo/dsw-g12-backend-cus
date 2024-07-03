@@ -102,11 +102,12 @@ def get_test_vigilancia():
         Test.id_paciente == Paciente.id_paciente,
         Paciente.id_usuario == Usuario.id_usuario,
         Usuario.documento == Persona.documento
-    ).all()
+    ).order_by(Test.id_test.desc()).all()
     
     tests_vigilancia = [
         {   
             "id_test": test.id_test,
+            "id_tipo_test": test.id_tipo_test,
             "tipo_test": test.tipo_test.nombre,
             "paciente": f"{test.paciente.usuario.persona.nombre} {test.paciente.usuario.persona.apellido_paterno} {test.paciente.usuario.persona.apellido_materno}",
             "fecha": str(test.fecha),
@@ -149,6 +150,7 @@ def get_test_mapa():
             "longitud": float(test.paciente.usuario.persona.ubigeo.longitud),
             "distrito": test.paciente.usuario.persona.ubigeo.distrito,
             "color": test.clasificacion.semaforo.color,
+            'id_tipo_test': test.id_tipo_test,
             "tipo_test": test.tipo_test.nombre,
             "id_vigilancia": test.id_vigilancia
         }

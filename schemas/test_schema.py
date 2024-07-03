@@ -17,7 +17,9 @@ class TestSchema(ma.Schema):
           'fecha',
           'id_vigilancia',
           'tipo_test',
-          'vigilancia'
+          'vigilancia',
+          'clasificacion',
+          'paciente'
         )
         
     tipo_test = ma.Nested(TipoTestSchema)
