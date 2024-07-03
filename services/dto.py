@@ -110,6 +110,7 @@ def get_test_vigilancia():
             "id_tipo_test": test.id_tipo_test,
             "tipo_test": test.tipo_test.nombre,
             "paciente": f"{test.paciente.usuario.persona.nombre} {test.paciente.usuario.persona.apellido_paterno} {test.paciente.usuario.persona.apellido_materno}",
+            "correo_paciente": test.paciente.usuario.correo,
             "fecha": str(test.fecha),
             "resultado": test.resultado,
             "color":test.clasificacion.semaforo.color,
