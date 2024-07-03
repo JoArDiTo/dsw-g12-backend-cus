@@ -163,3 +163,31 @@ def get_test_mapa():
         'tests': tests_mapa
     }
     return make_response(jsonify(data), 200)
+
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from utils.email import server, from_correo
+
+@dto.route('/email/tdo/send', methods=['POST'])
+def send_email():
+    data = request.get_json()
+    
+    email = data.get('email')
+    subject = data.get('subject')
+    body = data.get('body')
+
+    # Create a multipart message
+    message = MIMEMultipart()
+    message['From'] = from_correo
+    message['To'] = email
+    message['Subject'] = subject
+
+    # Add body to the email
+    message.attach(MIMEText(body, 'plain'))
+    
+    server.sendmail(from_correo, email, message.as_string())
+    
+    return jsonify({
+        'message': 'Email sent successfully',
+        'status': 200
+    })
