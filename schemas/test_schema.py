@@ -17,8 +17,6 @@ class TestSchema(ma.Schema):
           'fecha',
           'id_vigilancia',
           'tipo_test',
-          'paciente',
-          'clasificacion',
           'vigilancia'
         )
         

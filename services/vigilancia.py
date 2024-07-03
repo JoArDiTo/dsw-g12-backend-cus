@@ -20,6 +20,27 @@ def get_vigilancias():
     }
 
     return make_response(jsonify(data), 200)
+
+@vigilancias.route('/vigilancias/get/<int:id_vigilancia>', methods=['GET'])
+@jwt_required()
+def get_vigilancia(id_vigilancia):
+    vigilancia = Vigilancia.query.get(id_vigilancia)
+    
+    if not vigilancia:
+        data = {
+            'message': 'No se encontró la vigilancia',
+            'status': 404
+        }
+        
+        return make_response(jsonify(data), 404)
+    
+    data = {
+        'message': 'Vigilancia encontrada con éxito',
+        'status': 200,
+        'vigilancia': vigilancia_schema.dump(vigilancia)
+    }
+    
+    return make_response(jsonify(data), 200)
   
 @vigilancias.route('/vigilancias/insert', methods=['POST'])
 @jwt_required()
