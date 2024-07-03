@@ -107,12 +107,12 @@ def get_test_vigilancia():
     tests_vigilancia = [
         {   
             "id_test": test.id_test,
-            "Tipo de Test": test.tipo_test.nombre,
-            "Paciente": f"{test.paciente.usuario.persona.nombre} {test.paciente.usuario.persona.apellido_paterno} {test.paciente.usuario.persona.apellido_materno}",
-            "Fecha de Test": str(test.fecha),
-            "Resultado": test.resultado,
+            "tipo_test": test.tipo_test.nombre,
+            "paciente": f"{test.paciente.usuario.persona.nombre} {test.paciente.usuario.persona.apellido_paterno} {test.paciente.usuario.persona.apellido_materno}",
+            "fecha": str(test.fecha),
+            "resultado": test.resultado,
             "color":test.clasificacion.semaforo.color,
-            "Consignacion": test.id_vigilancia
+            "consignacion": test.id_vigilancia
         }
         for test in tests
     ]
@@ -145,11 +145,11 @@ def get_test_mapa():
     tests_mapa = [
         {
             "ubigeo": test.paciente.usuario.persona.ubigeo.id_ubigeo,
-            "Latitud": float(test.paciente.usuario.persona.ubigeo.latitud),
-            "Longitud": float(test.paciente.usuario.persona.ubigeo.longitud),
+            "latitud": float(test.paciente.usuario.persona.ubigeo.latitud),
+            "longitud": float(test.paciente.usuario.persona.ubigeo.longitud),
             "distrito": test.paciente.usuario.persona.ubigeo.distrito,
             "color": test.clasificacion.semaforo.color,
-            "Tipo de Test": test.tipo_test.nombre,
+            "tipo_test": test.tipo_test.nombre,
             "id_vigilancia": test.id_vigilancia
         }
         for test in tests
