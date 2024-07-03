@@ -8,6 +8,37 @@ from utils.db import db
 
 tdo = Blueprint('tdo', __name__)
 
+@tdo.route('/tdo/tests/get/<int:id_paciente>', methods=['GET'])
+def get_test_by_paciente(id_paciente):
+    tests = Test.query.options(
+        selectinload(Test.tipo_test),
+        selectinload(Test.clasificacion).selectinload(Clasificacion.semaforo),
+        selectinload(Test.paciente).selectinload(Paciente.usuario).selectinload(Usuario.persona)
+    ).filter(
+        Test.id_tipo_test == TipoTest.id_tipo_test,
+        Test.id_paciente == Paciente.id_paciente,
+        Paciente.id_usuario == Usuario.id_usuario,
+        Usuario.documento == Persona.documento
+    ).filter_by(id_paciente=id_paciente).all()
+    
+    result = [
+        {
+            "id_test": test.id_test,
+            "tipo_test": test.tipo_test.nombre,
+            "fecha": str(test.fecha),
+            "clasificacion": test.clasificacion.interpretacion,
+            "color": test.clasificacion.semaforo.color,
+            "id_vigilancia": test.id_vigilancia
+        } for test in tests
+    ]
+    
+    data = {
+        'message': 'Lista generada con éxito',
+        'status': 200,
+        'data': result
+    }
+    return make_response(jsonify(data), 200)
+
 @tdo.route('/tdo/preguntas/get/<int:id_tipo_test>', methods=['GET'])
 def get_preguntas_y_alternativas(id_tipo_test):
     result = {}
