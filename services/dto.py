@@ -167,24 +167,32 @@ def get_test_mapa():
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from utils.email import server, from_correo
+import smtplib
+from config import email, pwd
 
 @dto.route('/email/dto/insert', methods=['POST'])
 def send_email():
     data = request.get_json()
     
-    email = data.get('email')
+    email_to = data.get('email')
     subject = data.get('subject')
     body = data.get('body')
+    
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email, pwd)
+
 
     message = MIMEMultipart()
-    message['From'] = from_correo
-    message['To'] = email
+    message['From'] = email
+    message['To'] = email_to
     message['Subject'] = subject
 
     message.attach(MIMEText(body, 'plain'))
     
-    server.sendmail(from_correo, email, message.as_string())
+    server.sendmail(email, email_to, message.as_string())
+    
+    server.quit()
     
     return jsonify({
         'message': 'Email sent successfully',
