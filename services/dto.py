@@ -19,7 +19,7 @@ def get_test_by_paciente(id_paciente):
         Test.id_paciente == Paciente.id_paciente,
         Paciente.id_usuario == Usuario.id_usuario,
         Usuario.documento == Persona.documento
-    ).filter_by(id_paciente=id_paciente).all()
+    ).filter_by(id_paciente=id_paciente).order_by(Test.id_test.desc()).all()
     
     result = [
         {
