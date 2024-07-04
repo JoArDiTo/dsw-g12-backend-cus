@@ -57,10 +57,15 @@ def insert():
     db.session.add(test)
     db.session.commit()
     
+    new_test = {
+        "id_test": test.id_test,
+        "clasificacion": Clasificacion.query.get(test.id_clasificacion).interpretacion,
+    }
+    
     data = {
         'message': 'Test creado con éxito',
         'status': 201,
-        'test': test_schema.dump(test)
+        'test': new_test
     }
     
     return make_response(jsonify(data), 201)

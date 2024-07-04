@@ -42,10 +42,9 @@ def insert():
     data = request.get_json()
     
     id_test = data.get('id_test')
-    id_pregunta = data.get('id_pregunta')
-    id_alternativa = data.get('id_alternativa')
+    marcadas = data.get('marcadas')
     
-    if id_test==None or id_pregunta==None or id_alternativa==None:
+    if id_test==None or marcadas==None:
         data = {
             'message': 'Faltan datos',
             'status': 400
@@ -53,17 +52,19 @@ def insert():
         
         return make_response(jsonify(data), 400)
     
-    respuesta = Respuesta(id_test, id_pregunta, id_alternativa)
-    db.session.add(respuesta)
+    for marcada in marcadas:
+        respuesta = Respuesta(id_test, marcada['id_pregunta'], marcada['id_alternativa'])
+        db.session.add(respuesta)
+    
     db.session.commit()
     
-    data = {
-        'message': 'Respuesta creada con éxito',
-        'status': 201,
-        'respuesta': respuesta_schema.dump(respuesta)
+    result = {
+        "message": "Respuestas creadas con éxito",
+        "status": 201,
+        "respuestas": data
     }
     
-    return make_response(jsonify(data), 201)
+    return make_response(jsonify(result), 201)
 
 @respuestas.route('/respuestas/update/<int:id_respuesta>', methods=['PUT'])
 @jwt_required()
