@@ -53,11 +53,44 @@ PASSWORD = <contraseña-de-la-base-de-datos>
 DATABASE = <nombre-de-la-base-de-datos>
 HOST = <host-de-la-base-de-datos>
 SERVER = postgresql
+
+EMAIL = <correo-gmail-para-permitir-el-envío-de-correos>
+PASSWORD_EMAIL = <contraseña-de-aplicación-del-correo>
 ```
 
 - Corremos el programa
 ```bash
 python app.py
 ```
+
+## Observacion:
+Para obtener una contraseña de aplicación, se hace lo siguiente:
+- Tenemos que ir a la configuración de la cuenta gmail que vamos a usar.
+
+![Configurar-envío-de-correo](/imagenes-para-configurar-correo/paso-1.png)
+
+- Luego, vamos a la opción de seguridad
+
+![Configurar-envío-de-correo](/imagenes-para-configurar-correo/paso-2.png)
+
+- Y seleccionamos la opción para realizar la verificación en dos pasos.
+
+![Configurar-envío-de-correo](/imagenes-para-configurar-correo/paso-3.png)
+
+- Una vez configurada, buscamos *Contraseñas de aplicación* e ingresamos
+
+![Configurar-envío-de-correo](/imagenes-para-configurar-correo/paso-4.png)
+
+- Creamos el nombre de la aplicación
+
+![Configurar-envío-de-correo](/imagenes-para-configurar-correo/paso-5.png)
+
+- Finalmente, nos entrega la contraseña para ingresarlo en nuestras variables de entorno *.env*
+
+![Configurar-envío-de-correo](/imagenes-para-configurar-correo/paso-6.png)
+
+
+
+
 
 
